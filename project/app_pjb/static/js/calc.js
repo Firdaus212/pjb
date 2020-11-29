@@ -17,7 +17,7 @@ $(document).ready(function(){
                     $('#'+key).text(value.toString()); 
                 });
                 $('#execInfo').show();
-                $('#execInfo').html('Calculation time : '+response.exec_time+' ms');
+                $('#execInfo').html('Calculation time : '+response.exec_time+' s');
             },
             error: function(jqXHR, textStatus, errorThrown){
                 $( "#resultTable tbody tr td" ).each(function( ) {
