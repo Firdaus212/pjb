@@ -5,9 +5,10 @@ from . import db
 import matlab.engine
 import io
 import time
+import os
 
 main = Blueprint('main', __name__)
-matlab_file_path = r'F:\Daus\PJB\project\app_pjb\matlab_files'
+matlab_file_path = r''+os.getcwd()+r'\app_pjb\matlab_files'
 
 @main.route('/')
 def index():

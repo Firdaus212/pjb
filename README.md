@@ -1,5 +1,5 @@
 # PJB
-This is an application used for calculate some variables on an Hydro Powered Generator.
+This is an application used for calculate some variables on a Hydro Powered Generator.
 
 ## Prerequisite
 1. Matlab with minimum version R2018a 64-bit.

@@ -12,10 +12,10 @@ function result = pjb_func(elv_awal, elv_akhir, inf_sel, spls)
     %real_ht= data_simulasi(:,2);
     %real_qin= data_simulasi(:,3);
     %suplesi= data_simulasi(:,4);
-    real_h0= elv_awal
-    real_ht= elv_akhir
-    real_qin= inf_sel
-    suplesi= spls
+    real_h0= elv_awal;
+    real_ht= elv_akhir;
+    real_qin= inf_sel;
+    suplesi= spls;
 
     sim_t1=10;
     m1=[1 12 13 14 123 124 134 1234];
