@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center align-middle" style="margin-top: 50px;">
+    <div class="col-xs-10 col-sm-8 col-md-6 col-lg-4">
+        <div class="card border-warning">
+            <div class="card-header text-center text-white bg-warning">
+              LOGIN
+            </div>
+            <div class="card-body">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert alert-danger" role="alert">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+            {% endwith %}
+            <form method="POST" action="/login">
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" autofocus="">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">Remember Me</label>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">LOG IN</button>
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

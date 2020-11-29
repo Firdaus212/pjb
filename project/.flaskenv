@@ -1,0 +1,2 @@
+FLASK_APP=pjbapp.py
+FLASK_DEBUG=True
