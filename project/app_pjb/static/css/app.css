@@ -1,0 +1,20 @@
+.toast{
+    margin: auto;
+    position: absolute;
+    top: 50%; 
+    right: 0;
+    left: 0;
+}
+#loginBtn{
+    margin-top: 10px;
+}
+.welcome{
+    margin-bottom: 15px;
+}
+.welcome span{
+    color: yellow;
+}
+.col-title{
+    font-size: 11px;
+}
+

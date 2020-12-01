@@ -6,7 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
   <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+  <!-- Bootstrap 4.4 -->
   <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/all.min.css') }}">
+  <!-- Toast -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bs4Toast.css') }}">
+  <!-- Datatable -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='DataTables/datatables.min.css') }}">
+  <!-- App css -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 </head>
 <body class="bg-secondary">
    
@@ -24,6 +33,9 @@
                 {% if current_user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('main.calculation') }}">Calculation</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.data') }}">Data</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('main.profile') }}">Profile</a>
@@ -44,7 +56,7 @@
         </div>
     </nav>
 
-    <div class="container-fluid" style="padding-top: 50px;min-height: 78vh;">
+    <div class="container-fluid" style="padding-top: 20px;min-height: 78vh;">
         {% block content %}
         {% endblock %}
     </div>
@@ -53,20 +65,29 @@
     <footer class="page-footer font-small blue pt-4">
         <!-- Copyright -->
         <div class="footer-copyright text-center text-white py-3">© 2020 Copyright:
-        <a href="https://www.ptpjb.com/"> PT PJB - PT Pembangkitan Jawa Bali </a>
+        <a href="https://www.ptpjb.com/" style="color: yellow"> PT PJB - PT Pembangkitan Jawa Bali </a>
         </div>
         <!-- Copyright -->
     </footer>
     <!-- Footer -->
+
+    <!-- JQuery -->
     <script src="{{ url_for('static', filename='bootstrap/jquery-3.5.1.min.js') }}"></script>
+    <!-- Tooltip -->
     <script src="{{ url_for('static', filename='bootstrap/js/dist/tooltip.js') }}"></script>
+    <!-- Popover -->
     <script src="{{ url_for('static', filename='bootstrap/js/dist/popover.js') }}"></script>
+    <!-- Bootstrap 4.4 -->
     <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+    <!-- Toast js -->
+    <script src="{{ url_for('static', filename='js/bs4-toast.js') }}"></script>
+    <!-- Datatabel -->
+    <script src="{{ url_for('static', filename='DataTables/datatables.min.js') }}"></script>
+    <!-- App js -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     {% if js %}
     <script type="text/javascript">
         var CALC_URL = "{{ url_for('main.calc') }}"
-        $('.toast').toast('show');
     </script>
     <script src={{ url_for('static', filename=''.join(('js/', js))) }}></script>
     {% endif %}

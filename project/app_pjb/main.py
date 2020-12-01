@@ -12,12 +12,18 @@ matlab_file_path = r''+os.getcwd()+r'\app_pjb\matlab_files'
 
 @main.route('/')
 def index():
-    return render_template('index.html')
+    name = current_user.name if hasattr(current_user, 'name') else ""
+    return render_template('index.html', name=name)
 
 @main.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html', name=current_user.name)
+    user_info = {
+        "id": current_user.id,
+        "email": current_user.email,
+        "name": current_user.name,
+    }
+    return render_template('profile.html', user_info=user_info)
 
 @main.route('/calculation')
 @login_required
@@ -69,11 +75,15 @@ def calc():
         resp_dict['msg'] = "Invalid input"
         return make_response(jsonify(resp_dict), 400, headers)
 
-    elv_awal = float(elv_awal)
-    elv_akhir = float(elv_akhir)
-    inf_selorejo = float(inf_selorejo)
-    supl = float(supl)
-
+    try:
+        elv_awal = float(elv_awal)
+        elv_akhir = float(elv_akhir)
+        inf_selorejo = float(inf_selorejo)
+        supl = float(supl)
+    except Exception as e:
+        resp_dict['msg'] = str(e)
+        return make_response(jsonify(resp_dict), 400, headers)
+    
     start_time = time.time()
     
     result = {}
@@ -93,6 +103,7 @@ def calc():
         except Exception as e:
             resp_dict['msg'] = str(e)
             return make_response(jsonify(resp_dict), 400, headers)
+
         eng.quit()
 
         dam_data = Pltainfo(**result)
@@ -107,3 +118,11 @@ def calc():
     resp_dict['data'] = result
     return make_response(jsonify(resp_dict), 200, headers)
     
+@main.route('/data')
+@login_required
+def data():
+    table_col = ['inflow_selorejo', 'elevasi_awal', 'elevasi_target', 'elevasi_akhir', 'outflow_selorejo', 'mw_selorejo', 'mwh_selorejo', 
+    'limpas', 'inflow_outflow_mendalan', 'mw_mendalan_1', 'mw_mendalan_2', 'mw_mendalan_3', 'mw_mendalan_4', 'mw_mendalan', 'mwh_mendalan', 
+    'suplesi_siman', 'inflow_siman', 'mw_siman_1', 'mw_siman_2', 'mw_siman_3', 'mw_siman', 'mwh_siman']
+    col_to_disp = ['inflow_selorejo', 'elevasi_awal', 'elevasi_target', 'elevasi_akhir', 'outflow_selorejo',]
+    return render_template('data.html', column=table_col, col_to_disp=col_to_disp, js='data.js')

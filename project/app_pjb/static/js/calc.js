@@ -23,10 +23,17 @@ $(document).ready(function(){
                 $( "#resultTable tbody tr td" ).each(function( ) {
                     $(this).html('err');
                 });
-                alert(jqXHR.responseJSON.msg);
+                bs4Toast.error('Error!', jqXHR.responseJSON.msg, {
+                    delay : 1500,
+                    bodyClasses : ['text-white', 'bg-danger'],
+                    icon : {
+                        type : 'fontawesome', 
+                        class : 'fa-exclamation-circle'
+                    }
+                });
             },
             complete: function(){
-                $('#calcBtn').prop('disabled', false).html('Calculate');
+                $('#calcBtn').prop('disabled', false).html('<i class="fas fa-calculator"></i> Calculate');
             }
         });
     });

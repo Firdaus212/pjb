@@ -1,10 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="title text-white">
-    PT Pembangkitan Jawa Bali
-</h1>
-<h2 class="subtitle text-white">
-  Aplikasi Kalkulasi
-</h2>
+{% if current_user.is_authenticated %}
+<div class="row welcome"> 
+  <div class="offset-1 col-11">
+    <h4 class="card-text text-white ">Welcome, <span>{{ name }}<span></h4>
+  </div>
+</div>
+{% endif %}
+<div class="row">
+  <div class="offset-1 col-11">
+    <h1 class="card-title text-white">
+      PT Pembangkitan Jawa Bali
+    </h1>
+    <h2 class="card-text text-white">
+      Aplikasi Kalkulasi
+    </h2>
+  </div>
+</div>
 {% endblock %}

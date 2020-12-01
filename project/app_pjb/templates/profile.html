@@ -1,7 +1,70 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="title text-white">
-    Welcome, {{ name }}!
-</h1>
+<div class="row">
+    <div class="offset-xs-0 offset-md-1 col-xs-11 col-md-5" style="margin-bottom: 10px;">
+        <form method="POST" action="/change_name">
+            <div class="card">
+                <div class="card-header">
+                    Change Name
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="email">Fullname</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter your fullname" value="{{ user_info.name }}" required>
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary float-right">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="offset-xs-1 offset-md-0 col-xs-11 col-md-5">
+        <form action="POST" action="/change_password">
+            <div class="card">
+                <div class="card-header">
+                    Change Password
+                </div>
+                <div class="card-body">
+                        <div class="form-group">
+                            <label for="email">Old Password</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter your fullname" required>
+                                <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">New Password</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter your fullname" required>
+                                <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Confirm Password</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter your fullname" required>
+                                <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary float-right">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}
