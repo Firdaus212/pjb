@@ -34,6 +34,15 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('main.calculation') }}">Calculation</a>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Optimization
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item" href="{{ url_for('main.sutamiwlingi') }}">Sutami Walingi</a>
+                      <a class="dropdown-item" href="{{ url_for('main.sengguruh') }}">Sengguruh</a>
+                    </div>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('main.data') }}">Data</a>
                 </li>
@@ -86,9 +95,6 @@
     <!-- App js -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     {% if js %}
-    <script type="text/javascript">
-        var CALC_URL = "{{ url_for('main.calc') }}"
-    </script>
     <script src={{ url_for('static', filename=''.join(('js/', js))) }}></script>
     {% endif %}
 </body>

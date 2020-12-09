@@ -8,8 +8,8 @@
         Data 
       </div>
       <div class="card-body" style="overflow: auto;">
-        <table id="table_id" class="table table-sm">
-          <thead class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+        <table id="table_id" class="table">
+          <thead class="table table-striped table-bordered nowrap" style="width:100%">
             <tr>
               {% for col in column %}
                   {% set header_title = col.replace('_', ' ').title().replace('Mw', 'MW') %}

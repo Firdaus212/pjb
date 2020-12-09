@@ -1,10 +1,10 @@
 $(document).ready(function(){
     $('#execInfo').hide();
-
+    
     $('#calcBtn').click(function(){
         $.ajax({
             type: "POST",
-            url: CALC_URL,
+            url: $(this).attr('data-url'),
             data: $('#inputForm').serialize(),
             dataType: "JSON",
             timeout: 1000*60*5,
@@ -37,4 +37,6 @@ $(document).ready(function(){
             }
         });
     });
+
+    
 });
