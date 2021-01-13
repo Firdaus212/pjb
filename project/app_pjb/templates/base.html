@@ -32,16 +32,13 @@
                 </li>
                 {% if current_user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('main.calculation') }}">Calculation</a>
+                    <a class="nav-link" href="{{ url_for('main.calculation') }}">Cascade SMS Opt</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Optimization
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item" href="{{ url_for('main.sutamiwlingi') }}">Sutami Walingi</a>
-                      <a class="dropdown-item" href="{{ url_for('main.sengguruh') }}">Sengguruh</a>
-                    </div>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.sutamiwlingi') }}">Cascade Sutami-Wlingi Opt</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.sengguruh') }}">Sengguruh Opt</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('main.data') }}">Data</a>

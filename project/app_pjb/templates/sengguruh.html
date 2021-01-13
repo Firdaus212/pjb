@@ -35,7 +35,22 @@
                     <tbody>
                         {% for value in output_table %}
                         <tr>
-                            <th scope="row">{{ value.replace('_', ' ').title() }}</th>
+                            {% if value == 'beban_1' %}
+                            {% set label = 'Daya Output Sengguruh #1' %}
+                            {% elif value == 'beban_2' %}
+                            {% set label = 'Daya Output Sengguruh #2' %}
+                            {% elif value == 'energi_1' %}
+                            {% set label = 'Energi Output Sengguruh #1' %}
+                            {% elif value == 'energi_2' %}
+                            {% set label = 'Energi Output Sengguruh #2' %}
+                            {% elif value == 'energi_2' %}
+                            {% set label = 'Energi Output Sengguruh #2' %}
+                            {% elif value == 'total_beban' %}
+                            {% set label = 'Total Daya Output Sengguruh' %}
+                            {% elif value == 'total_energi' %}
+                            {% set label = 'Total Energi Output Sengguruh' %}
+                            {% endif %}
+                            <th scope="row">{{ label }}</th>
                             <td id="{{ value }}" class="text-right">0.0</td>
                         </tr>
                         {% endfor %}

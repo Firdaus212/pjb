@@ -6,6 +6,7 @@ import matlab.engine
 import io
 import time
 import os
+import re
 
 main = Blueprint('main', __name__)
 matlab_file_path_selorejo = r''+os.getcwd()+r'\app_pjb\matlab_files\selorejo'
@@ -45,7 +46,6 @@ def calculation():
     output_table = {
         'inflow_selorejo': 0.0, 
         'elevasi_awal': 0.0, 
-        'elevasi_target': 0.0, 
         'elevasi_akhir': 0.0, 
         'outflow_selorejo': 0.0, 
         'mw_selorejo': 0.0, 
@@ -192,7 +192,7 @@ def calc_sutamiwlingi():
 @login_required
 def sengguruh():
     input_fields = ['inflow_sengguruh']
-    output_table = ['beban_1', 'beban_2', 'energi_1', 'energi_2', 'total_energi']
+    output_table = ['beban_1', 'beban_2', 'energi_1', 'energi_2', 'total_beban', 'total_energi']
     return render_template('sengguruh.html', name=current_user.name, input_fields=input_fields, output_table=output_table, js='calc.js')
 
 @main.route('/calc_sengguruh', methods=['POST'])

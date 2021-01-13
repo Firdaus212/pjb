@@ -19,11 +19,15 @@
                     </div>
                     <div class="form-group">
                         <label for="inf_selorejo">Inflow Selorejo</label>
-                        <input type="text" class="form-control text-right" id="inf_selorejo" name="inf_selorejo" placeholder="Inflow Selorejo" value="8.78" readonly>
+                        <input type="text" class="form-control text-right" id="inf_selorejo" name="inf_selorejo" placeholder="Inflow Selorejo">
                     </div>
                     <div class="form-group">
-                        <label for="supl">Suplesi</label>
-                        <input type="text" class="form-control text-right" id="supl" name="supl" placeholder="Suplesi" value="0" readonly>
+                        <label for="supl">Suplesi Siman</label>
+                        <input type="text" class="form-control text-right" id="supl" name="supl" placeholder="Suplesi Siman">
+                    </div>
+                    <div class="form-group">
+                        <label for="supl">Time Frame</label>
+                        <input type="text" class="form-control text-right" id="time_frame" name="time_frame" placeholder="Time Frame">
                     </div>
                     <div class="form-group">
                         <button type="button" id="calcBtn" class="btn btn-primary btn-block" data-url="{{ url_for('main.calc') }}">
@@ -44,8 +48,32 @@
                     </thead>
                     <tbody>
                         {% for key, value in output_table.items() %}
+                        {% if "mwh" in key %}
+                        {% set srch = "Mwh" %}
+                        {% set rep = "Energi Output" %}
+                        {% set unit = "(MWh)" %}
+                        {% elif "mw" in key and '1' not in key and '2' not in key and '3' not in key and '4' not in key %}
+                        {% set srch = "Mw" %}
+                        {% set rep = "Total Daya Output" %}
+                        {% set unit = "(MW)" %}
+                        {% elif "mw" in key %}
+                        {% set srch = "Mw" %}
+                        {% set rep = "Daya Output" %}
+                        {% set unit = "(MW)" %}
+                        {% else %}
+                        {% set srch = "" %}
+                        {% set rep = "" %}
+                        {% set unit = "" %}
+                        {% endif %}
                         <tr>
-                            <th scope="row">{{ key.replace('_', ' ').title().replace('Mw', 'MW') }}</th>
+                            {% if key == 'inflow_outflow_mendalan' %}
+                            <th scope="row">Inflow Mendalan</th>
+                            {% elif '1' in key or '2' in key or '3' in key or '4' in key %}
+                            {% set label = key[:key|length-1] + '#' + key[key|length-1:key|length]  %}
+                            <th scope="row">{{ label.replace('_', ' ').title().replace(srch, rep) + " " + unit }}</th>
+                            {% else %}
+                            <th scope="row">{{ key.replace('_', ' ').title().replace(srch, rep) + " " + unit }}</th>
+                            {% endif %}
                             <td id="{{ key }}" class="text-right">{{value}}</td>
                         </tr>
                         {% endfor %}

@@ -1,20 +1,28 @@
 $(document).ready(function(){
     $('#execInfo').hide();
     
+    var disableCalcBtn = function(){
+        $('#calcBtn').prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...');
+    }
+
+    var enableCalcBtn = function(){
+        $('#calcBtn').prop('disabled', false).html('<i class="fas fa-calculator"></i> Calculate');
+    }
+
     $('#calcBtn').click(function(){
         $.ajax({
             type: "POST",
             url: $(this).attr('data-url'),
             data: $('#inputForm').serialize(),
             dataType: "JSON",
-            timeout: 1000*60*5,
+            timeout: 1000*60*10,
             beforeSend: function(){
-                $('#calcBtn').prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...');
+                disableCalcBtn();
                 $('#execInfo').hide();
             },
             success: function (response) {
                 $.each(response.data, function (key, value) { 
-                    $('#'+key).text(value.toString()); 
+                    $('#'+key).text(value.toFixed(2).toString()); 
                 });
                 $('#execInfo').show();
                 $('#execInfo').html('Calculation time : '+response.exec_time+' s');
@@ -23,6 +31,7 @@ $(document).ready(function(){
                 $( "#resultTable tbody tr td" ).each(function( ) {
                     $(this).html('err');
                 });
+                $('#calcBtn').prop('disabled', false).html('<i class="fas fa-calculator"></i> Calculate');
                 bs4Toast.error('Error!', jqXHR.responseJSON.msg, {
                     delay : 1500,
                     bodyClasses : ['text-white', 'bg-danger'],
@@ -33,7 +42,7 @@ $(document).ready(function(){
                 });
             },
             complete: function(){
-                $('#calcBtn').prop('disabled', false).html('<i class="fas fa-calculator"></i> Calculate');
+                enableCalcBtn();
             }
         });
     });

@@ -15,5 +15,6 @@ function [outputArg1] = opt_sengguruh(inflow_sengguruh)
     outputArg1.beban_2 = round(beban_2, 4);
     outputArg1.energi_1 = round(beban_1_tot, 4);
     outputArg1.energi_2 = round(beban_2_tot, 4);
+    outputArg1.total_beban = round(beban_1 + beban_2, 4);
     outputArg1.total_energi = round(beban_1_tot + beban_2_tot, 4);
 end

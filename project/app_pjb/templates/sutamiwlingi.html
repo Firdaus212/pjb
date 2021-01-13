@@ -3,7 +3,7 @@
 {% block content %}
 <div class="card border-warning">
     <div class="card-header text-white bg-warning">
-      Sutami Wlingi Optimization
+      Sutami & Wlingi Optimization
     </div>
     <div class="card-body">
         <div class="row">
@@ -35,7 +35,13 @@
                     <tbody>
                         {% for value in output_table %}
                         <tr>
+                            {% if '1' in value or '2' in value or '3' in value %}
+                            {% set label = value[:value|length-1] + '#' + value[value|length-1:value|length]  %}
+                            <th scope="row">{{ label.replace('_', ' ').title() }}</th>
+                            {% else %}
                             <th scope="row">{{ value.replace('_', ' ').title() }}</th>
+                            {% endif %}
+                            <!-- <th scope="row">{{ value.replace('_', ' ').title() }}</th> -->
                             <td id="{{ value }}" class="text-right">0.0</td>
                         </tr>
                         {% endfor %}
