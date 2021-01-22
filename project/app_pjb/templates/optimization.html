@@ -3,20 +3,23 @@
 {% block content %}
 <div class="card border-warning">
     <div class="card-header text-white bg-warning">
-      Sutami & Wlingi Optimization
+      {{ data.title }}
     </div>
     <div class="card-body">
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-6" style="margin-bottom: 15px;">
                 <form id="inputForm">
-                    {% for value in input_fields %}
+                    {% for input in data.inputs %}
                     <div class="form-group">
-                        <label for="{{ value }}">{{ value.replace('_', ' ').title() }}</label>
-                        <input type="text" class="form-control text-right" id="{{ value }}" name="{{ value }}" placeholder="{{ value.replace('_', ' ').title() }}">
+                        <label for="{{ input.name }}">{{ input.label }}</label>
+                        <input type="{{ input.type }}" class="form-control text-right" id="{{ input.name }}" name="{{ input.name }}" placeholder="{{ input.label }}">
                     </div>
                     {% endfor %}
+                    {% if data.hidden_input_value != None %}
+                    <input type="hidden" id="area" name="area" value="{{ data.hidden_input_value }}">
+                    {% endif %}
                     <div class="form-group">
-                        <button type="button" id="calcBtn" class="btn btn-primary btn-block" data-url="{{ url_for('main.calc_sutamiwlingi') }}">
+                        <button type="button" id="calcBtn" class="btn btn-primary btn-block" data-url="{{ data.data_url }}">
                             <i class="fas fa-calculator"></i> Calculate
                         </button>
                     </div>
@@ -33,16 +36,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for value in output_table %}
+                        {% for column in data.columns %}
                         <tr>
-                            {% if '1' in value or '2' in value or '3' in value %}
-                            {% set label = value[:value|length-1] + '#' + value[value|length-1:value|length]  %}
-                            <th scope="row">{{ label.replace('_', ' ').title() }}</th>
-                            {% else %}
-                            <th scope="row">{{ value.replace('_', ' ').title() }}</th>
-                            {% endif %}
-                            <!-- <th scope="row">{{ value.replace('_', ' ').title() }}</th> -->
-                            <td id="{{ value }}" class="text-right">0.0</td>
+                            <th scope="row">{{ column.label }}</th>
+                            <td id="{{ column.id }}" class="text-right">0.0</td>
                         </tr>
                         {% endfor %}
                     </tbody>
