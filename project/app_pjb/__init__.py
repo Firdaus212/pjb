@@ -2,9 +2,14 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
+import matlab.engine
 
 # init SQLAlchemy so we can use it later in our models
 db = SQLAlchemy()
+
+# init MATLAb Engine
+future = matlab.engine.start_matlab(background=True)
+eng = future.result()
 
 def create_app():
     app = Flask(__name__, template_folder="templates", static_folder='static')
