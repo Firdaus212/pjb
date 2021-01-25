@@ -32,10 +32,10 @@
                 </li>
                 {% if current_user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('main.optimization', area='sms' ) }}">Cascade SMS Opt 1</a>
+                    <a class="nav-link" href="{{ url_for('main.optimization', area='sms1' ) }}">Cascade SMS Opt 1</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('main.optimization', area='sms_m' ) }}">Cascade SMS Opt 2</a>
+                    <a class="nav-link" href="{{ url_for('main.optimization', area='sms2' ) }}">Cascade SMS Opt 2</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('main.optimization', area='sutami-wlingi' ) }}">Cascade Sutami-Wlingi Opt</a>

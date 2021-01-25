@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, make_response, jsonify, request, send_file
+from flask import Blueprint, render_template, make_response, jsonify, request, send_file, redirect, url_for
 from flask_login import login_required, current_user
 from .models import SMS1, SMS2, SutamiWlingi, Sengguruh
 from . import db, eng
@@ -12,9 +12,9 @@ matlab_file_path_sutami = r''+os.getcwd()+r'\app_pjb\matlab_files\sutami'
 headers = {"Content-Type": "application/json"}
 
 def generateInsertData(result, area):
-    if area == 'sms':
+    if area == 'sms1':
         return SMS1(**result)
-    elif area == 'sms_m':
+    elif area == 'sms2':
         return SMS2(**result)
     elif area == 'sutami-wlingi':
         return SutamiWlingi(**result)
@@ -23,9 +23,9 @@ def generateInsertData(result, area):
 
 def checkDataExistInDatabase(input, area):
     found = None
-    if area == 'sms':
+    if area == 'sms1':
         found = SMS1.query.filter_by(**input).first()
-    elif area == 'sms_m':
+    elif area == 'sms2':
         found = SMS2.query.filter_by(**input).first()
     elif area == 'sutami-wlingi':
         found = SutamiWlingi.query.filter_by(**input).first()
@@ -60,10 +60,10 @@ def performOptimization(resp_dict, post_data, area):
         result = data_found
     else:
         try:
-            if area == 'sms':
+            if area == 'sms1':
                 eng.addpath(matlab_file_path_selorejo)
                 result = eng.sms1(conv_res, nargout=1)
-            elif area == 'sms_m':
+            elif area == 'sms2':
                 eng.addpath(matlab_file_path_selorejo)
                 result = eng.sms2(conv_res, nargout=1)
             elif area == 'sutami-wlingi':
@@ -111,6 +111,11 @@ def profile():
 def data():
     return render_template('data.html', data=getTableDataPageData())
 
+@main.route('/not_found')
+@login_required
+def not_found():
+    return render_template('404.html', data=data)
+
 @main.route('/elevation_data', methods=['POST'])
 @login_required
 def elevation_data():
@@ -137,16 +142,16 @@ def elevation_data():
 @main.route('/optimization/<string:area>', methods=['GET'])
 @login_required
 def optimization(area):
-    if area == 'sms':
+    if area == 'sms1':
         data = getSMSOpt1PageData()
-    elif area == 'sms_m':
+    elif area == 'sms2':
         data = getSMSOpt2PageData()
     elif area == 'sutami-wlingi':
         data = getSutamiWlingiOptPageData()
     elif area == 'sengguruh':
         data = getSengguruhOptPageData()
     else:
-        data = {}
+        return redirect(url_for('main.not_found'))
     data['name'] = current_user.name
     return render_template('optimization.html', data=data )
 
@@ -166,9 +171,9 @@ def optimize():
         'exec_time': -1
     }
 
-    if area == 'sms':
+    if area == 'sms1':
         resp_dict, status = performOptimization(resp_dict, post_data, area)
-    elif area == 'sms_m':
+    elif area == 'sms2':
         resp_dict, status = performOptimization(resp_dict, post_data, area)
     elif area == 'sutami-wlingi':
         resp_dict, status = performOptimization(resp_dict, post_data, area)
