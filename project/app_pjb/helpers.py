@@ -32,7 +32,7 @@ def getSMSOpt1PageData():
         { 'label': 'Total Daya Output Siman', 'id': 'total_daya_output_siman' },
         { 'label': 'Energi Output Siman', 'id': 'energi_output_siman' }
     ]
-    data['hidden_input_value'] = 'sms'
+    data['hidden_input_value'] = 'sms1'
     data['js'] = 'optimize.js'
     data['data_url'] = url_for('main.optimize')
     return data
@@ -69,7 +69,7 @@ def getSMSOpt2PageData():
         { 'label': 'Total Daya Output Siman', 'id': 'total_daya_output_siman' },
         { 'label': 'Energi Output Siman', 'id': 'energi_output_siman' }
     ]
-    data['hidden_input_value'] = 'sms_m'
+    data['hidden_input_value'] = 'sms2'
     data['js'] = 'optimize.js'
     data['data_url'] = url_for('main.optimize')
     return data
@@ -127,6 +127,14 @@ def getSengguruhOptPageData():
     data['hidden_input_value'] = 'sengguruh'
     data['js'] = 'optimize.js'
     data['data_url'] = url_for('main.optimize')
+    return data
+
+def getTableColumnSMS1():
+    data = {}
+    data['column'] = [c['id'] for c in getSMSOpt1PageData()['columns']]
+    data['col_to_disp'] = [c['name'] for c in getSMSOpt1PageData()['inputs']]
+    data['js'] = 'data.js'
+    data['column'] = data['column'] + list(set(data['col_to_disp']) - set(data['column']))
     return data
 
 def getTableDataPageData():
