@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, make_response, jsonify, request, send_file, redirect, url_for
 from flask_login import login_required, current_user
-from .models import SMS1, SMS2, SutamiWlingi, Sengguruh
+from .models import *
 from . import db, eng
 import io, time, os, re
-from .helpers import getSMSOpt1PageData, getSMSOpt2PageData, getSutamiWlingiOptPageData, getSengguruhOptPageData, getTableDataPageData
+from .helpers import *
 
 main = Blueprint('main', __name__)
 matlab_file_path_selorejo = r''+os.getcwd()+r'\app_pjb\matlab_files\selorejo'
@@ -106,30 +106,46 @@ def profile():
     }
     return render_template('profile.html', data={'user_info': user_info})
 
-@main.route('/data')
+@main.route('/data/<string:area>')
 @login_required
-def data():
-    return render_template('data.html', data=getTableDataPageData())
+def data(area):
+    data = getTableColumnData(area)
+    if data == {}:
+        return redirect(url_for('main.not_found'))
+    return render_template('data.html', data=data)
 
 @main.route('/not_found')
 @login_required
 def not_found():
     return render_template('404.html', data=data)
 
-@main.route('/elevation_data', methods=['POST'])
+@main.route('/table_data/<string:area>', methods=['POST'])
 @login_required
-def elevation_data():
+def table_data(area):
     draw = int(request.form.get('draw'))
     offset = int(request.form.get('start'))
     limit = int(request.form.get('length'))
-    info = Pltainfo.query.order_by(Pltainfo.elevasi_akhir).offset(offset).limit(limit).all()
-    total = Pltainfo.query.count()
+    total = 0
+
+    if area == "sms1":
+        info = SMS1.query.order_by(SMS1.h0).offset(offset).limit(limit).all()
+        total = SMS1.query.count()
+    elif area == "sms2":
+        info = SMS2.query.order_by(SMS2.h0).offset(offset).limit(limit).all()
+        total = SMS2.query.count()
+    elif area == "sutami-wlingi":
+        info = SutamiWlingi.query.order_by(SutamiWlingi.elevasi_awal).offset(offset).limit(limit).all()
+        total = SutamiWlingi.query.count()
+    elif area == "sengguruh":
+        info = Sengguruh.query.order_by(Sengguruh.inflow_sengguruh).offset(offset).limit(limit).all()
+        total = Sengguruh.query.count()
+
     data = []
     for inf in info:
-        item = []
+        item = {}
         for key in inf.__table__.columns.keys():
             if key != 'id':
-                item.append(getattr(inf, key))
+                item[key] = getattr(inf, key)
         data.append(item)
     resp_info = {
         "draw": draw,

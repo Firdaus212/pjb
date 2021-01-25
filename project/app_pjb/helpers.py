@@ -129,12 +129,32 @@ def getSengguruhOptPageData():
     data['data_url'] = url_for('main.optimize')
     return data
 
-def getTableColumnSMS1():
+def getTableColumnData(area):
     data = {}
-    data['column'] = [c['id'] for c in getSMSOpt1PageData()['columns']]
-    data['col_to_disp'] = [c['name'] for c in getSMSOpt1PageData()['inputs']]
-    data['js'] = 'data.js'
-    data['column'] = data['column'] + list(set(data['col_to_disp']) - set(data['column']))
+
+    if area == "sms1":
+        data['column'] = [c['id'] for c in getSMSOpt1PageData()['columns']]
+        data['col_to_disp'] = [c['name'] for c in getSMSOpt1PageData()['inputs']]
+        data['area'] = 'sms1'
+    elif area == "sms2":
+        data['column'] = [c['id'] for c in getSMSOpt2PageData()['columns']]
+        data['col_to_disp'] = [c['name'] for c in getSMSOpt2PageData()['inputs']]
+        data['area'] = 'sms2'
+    elif area == "sutami-wlingi":
+        data['column'] = [c['id'] for c in getSutamiWlingiOptPageData()['columns']]
+        data['col_to_disp'] = [c['name'] for c in getSutamiWlingiOptPageData()['inputs']]
+        data['area'] = 'sutami-wlingi'
+    elif area == "sengguruh":
+        data['column'] = [c['id'] for c in getSengguruhOptPageData()['columns']]
+        # data['col_to_disp'] = [c['name'] for c in getSengguruhOptPageData()['inputs']]
+        data['col_to_disp'] = [c['name'] for c in getSengguruhOptPageData()['inputs']]
+        data['area'] = 'sengguruh'
+    
+    if data != {}:
+        data['column'] = data['col_to_disp'] + list(set(data['column']) - set(data['col_to_disp']))
+        if area == "sengguruh":
+            data['col_to_disp'] = data['column']
+        data['js'] = 'data.js'
     return data
 
 def getTableDataPageData():
