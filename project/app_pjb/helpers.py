@@ -33,7 +33,7 @@ def getSMSOpt1PageData():
         { 'label': 'Energi Output Siman', 'id': 'energi_output_siman' }
     ]
     data['hidden_input_value'] = 'sms'
-    data['js'] = 'calc.js'
+    data['js'] = 'optimize.js'
     data['data_url'] = url_for('main.optimize')
     return data
 
@@ -70,7 +70,7 @@ def getSMSOpt2PageData():
         { 'label': 'Energi Output Siman', 'id': 'energi_output_siman' }
     ]
     data['hidden_input_value'] = 'sms_m'
-    data['js'] = 'calc.js'
+    data['js'] = 'optimize.js'
     data['data_url'] = url_for('main.optimize')
     return data
 
@@ -106,7 +106,7 @@ def getSutamiWlingiOptPageData():
        
     ]
     data['hidden_input_value'] = 'sutami-wlingi'
-    data['js'] = 'calc.js'
+    data['js'] = 'optimize.js'
     data['data_url'] = url_for('main.optimize')
     return data
 
@@ -125,7 +125,7 @@ def getSengguruhOptPageData():
         { 'label': 'Total Energi Output Sengguruh', 'id': 'total_energi' }
     ]
     data['hidden_input_value'] = 'sengguruh'
-    data['js'] = 'calc.js'
+    data['js'] = 'optimize.js'
     data['data_url'] = url_for('main.optimize')
     return data
 

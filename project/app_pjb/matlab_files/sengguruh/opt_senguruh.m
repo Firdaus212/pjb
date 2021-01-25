@@ -1,5 +1,5 @@
 function [outputArg1] = opt_sengguruh(input)
-    inflow_sengguruh = input.inflow_sengguruh
+    inflow_sengguruh = input.inflow_sengguruh;
     %%Perhitungan Beban
     q_out = inflow_sengguruh/2;
     %eff_1 = (2E-05*(q_out.^3)-0.0042*(q_out.^2)+0.2722*(q_out)+91.858)/100;

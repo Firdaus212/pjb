@@ -22,7 +22,7 @@ $(document).ready(function(){
             },
             success: function (response) {
                 $.each(response.data, function (key, value) { 
-                    $('#'+key).text(value.toFixed(2).toString()); 
+                    $('#resultTable #'+key).text(value.toFixed(2).toString()); 
                 });
                 $('#execInfo').show();
                 $('#execInfo').html('Calculation time : '+response.exec_time+' s');

@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, make_response, jsonify, request
+from flask import Blueprint, render_template, make_response, jsonify, request, send_file
 from flask_login import login_required, current_user
-from .models import Pltainfo
+from .models import SMS1, SMS2, SutamiWlingi, Sengguruh
 from . import db
 import matlab.engine
 import io
@@ -18,6 +18,30 @@ headers = {"Content-Type": "application/json"}
 # def valid_input(value):
 #     return value != None and value != ''
 
+def generateInsertData(result, area):
+    if area == 'sms':
+        return SMS1(**result)
+    elif area == 'sms_m':
+        return SMS2(**result)
+    elif area == 'sutami-wlingi':
+        return SutamiWlingi(**result)
+    elif area == 'sengguruh':
+        return Sengguruh(**result)
+
+def checkDataExistInDatabase(input, area):
+    found = None
+    if area == 'sms':
+        found = SMS1.query.filter_by(**input).first()
+    elif area == 'sms_m':
+        found = SMS2.query.filter_by(**input).first()
+    elif area == 'sutami-wlingi':
+        found = SutamiWlingi.query.filter_by(**input).first()
+    elif area == 'sengguruh':
+        found = Sengguruh.query.filter_by(**input).first()
+    if found != None:
+        return True, found
+    return False, found
+
 def converToFloat(inp):
     try:
         for k in inp:
@@ -25,6 +49,55 @@ def converToFloat(inp):
     except Exception as e:
         return False, str(e)
     return True, inp
+
+def performOptimization(resp_dict, post_data, area):
+    start_time = time.time()
+    conv_status, conv_res = converToFloat(post_data)
+    if conv_status == False:
+        resp_dict['msg'] = 'Invalid Input'
+        return resp_dict, 400
+    
+    result = {}
+
+    is_data_exist, data_found = checkDataExistInDatabase(conv_res, area)
+
+    if is_data_exist:
+        data_found = data_found.__dict__
+        del data_found['_sa_instance_state']
+        result = data_found
+    else:
+        try:
+            eng = matlab.engine.start_matlab()
+            if area == 'sms':
+                eng.addpath(matlab_file_path_selorejo)
+                result = eng.sms1(conv_res, nargout=1)
+            elif area == 'sms_m':
+                eng.addpath(matlab_file_path_selorejo)
+                result = eng.sms2(conv_res, nargout=1)
+            elif area == 'sutami-wlingi':
+                eng.addpath(matlab_file_path_sutami)
+                result = eng.opt(conv_res, nargout=1)
+            elif area == 'sengguruh':
+                eng.addpath(matlab_file_path_sengguruh)
+                result = eng.opt_senguruh(conv_res, nargout=1)
+            eng.quit()
+        except Exception as e:
+            resp_dict['msg'] = str(e)
+            return resp_dict, 400
+
+        if result != {}:
+            result.update(conv_res)
+            insert_data = generateInsertData(result, area)
+            try:
+                db.session.add(insert_data)
+                db.session.commit()
+            except Exception as e:
+                resp_dict['db_insert_error'] = str(e)
+
+    resp_dict['exec_time'] = time.time() - start_time
+    resp_dict['error'] = False
+    resp_dict['data'] = result
+    return resp_dict, 200
 
 @main.route('/')
 def index():
@@ -140,61 +213,6 @@ def optimization(area):
     data['name'] = current_user.name
     return render_template('optimization.html', data=data )
 
-def performOptimization(resp_dict, post_data, area):
-    start_time = time.time()
-    conv_status, conv_res = converToFloat(post_data)
-    if conv_status == False:
-        resp_dict['msg'] = 'Invalid Input'
-        return resp_dict, 400
-    
-    result = {}
-
-    if area == 'sms':
-        eng = matlab.engine.start_matlab()
-        eng.addpath(matlab_file_path_selorejo)
-        
-        try:
-            result = eng.sms1(conv_res, nargout=1)
-        except Exception as e:
-            resp_dict['msg'] = str(e)
-            return resp_dict, 400
-        eng.quit()
-    elif area == 'sms_m':
-        eng = matlab.engine.start_matlab()
-        eng.addpath(matlab_file_path_selorejo)
-        
-        try:
-            result = eng.sms2(conv_res, nargout=1)
-        except Exception as e:
-            resp_dict['msg'] = str(e)
-            return resp_dict, 400
-        eng.quit()
-    elif area == 'sutami-wlingi':
-        eng = matlab.engine.start_matlab()
-        eng.addpath(matlab_file_path_sutami)
-        
-        try:
-            result = eng.opt(conv_res, nargout=1)
-        except Exception as e:
-            resp_dict['msg'] = str(e)
-            return resp_dict, 400
-        eng.quit()
-    elif area == 'sengguruh':
-        eng = matlab.engine.start_matlab()
-        eng.addpath(matlab_file_path_sengguruh)
-        
-        try:
-            result = eng.opt_senguruh(conv_res, nargout=1)
-        except Exception as e:
-            resp_dict['msg'] = str(e)
-            return resp_dict, 400
-        eng.quit()
-
-    resp_dict['exec_time'] = time.time() - start_time
-    resp_dict['error'] = False
-    resp_dict['data'] = result
-    return resp_dict, 200
-
 @main.route('/optimize', methods=['POST'])
 @login_required
 def optimize():
@@ -221,3 +239,30 @@ def optimize():
         resp_dict, status = performOptimization(resp_dict, post_data, area)
         
     return make_response(jsonify(resp_dict), status, headers)  
+
+@main.route('/matlab_files', methods=['GET'])
+@login_required
+def matlab_files():
+    data = {}
+    data['title'] = "Matlab Files for Optimization"
+    data['selorejo'] = os.listdir(matlab_file_path_selorejo)
+    data['sutami-wlingi'] = os.listdir(matlab_file_path_sutami)
+    data['sengguruh'] = os.listdir(matlab_file_path_sengguruh)
+    return render_template('matlab-data.html', data=data)
+
+@main.route('/download/<string:folder>/<string:filename>', methods=['GET'])
+@login_required
+def download(folder, filename):
+    folder_name = ''
+
+    if folder == 'selorejo':
+        folder_name = matlab_file_path_selorejo
+    elif folder == 'sutami-wlingi':
+        folder_name = matlab_file_path_sutami
+    elif folder == 'sengguruh':
+        folder_name = matlab_file_path_sengguruh
+
+    if folder_name != '' and os.path.exists(folder_name + '\\' +filename):
+        return send_file(folder_name + '\\' +filename, as_attachment=True)
+    else:
+        return make_response(jsonify({'status': 'error', 'msg': 'File not found'}), 400, headers)  
