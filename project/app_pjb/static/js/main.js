@@ -6,4 +6,10 @@ $(document).ready(function () {
             $(this).addClass('active');
         }
     });
+    $('.nav-item .dropdown-item').each( function () { 
+        if ($(this).prop('href') == url){
+            $(this).addClass('active');
+            $(this).parents('.nav-item').addClass('active');
+        }
+    });
 });
