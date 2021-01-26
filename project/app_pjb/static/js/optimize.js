@@ -6,6 +6,17 @@ $(document).ready(function(){
         $('#calcBtn').prop('disabled', status).html(text);
     }
 
+    $(':input[type="number"]').change(function () { 
+        var h0 = parseFloat($(this).val());
+        var min = parseFloat($(this).attr('min'));
+        var max = parseFloat($(this).attr('max'));
+        if(h0 > max){
+            $(this).val(max);
+        }else if(h0 < min){
+            $(this).val(min);
+        }
+    });
+
     $('#calcBtn').click(function(){
         $.ajax({
             type: "POST",

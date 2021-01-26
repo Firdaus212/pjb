@@ -12,7 +12,11 @@
                     {% for input in data.inputs %}
                     <div class="form-group">
                         <label for="{{ input.name }}">{{ input.label }}</label>
-                        <input type="{{ input.type }}" class="form-control text-right" id="{{ input.name }}" name="{{ input.name }}" placeholder="{{ input.label }}">
+                        {% if input.type == 'number' %}
+                            <input type="number" min="{{ input.min }}" max="{{ input.max }}" step="{{ input.step }}" class="form-control text-right" id="{{ input.name }}" name="{{ input.name }}" placeholder="{{ input.label }}">
+                        {% else %}
+                            <input type="{{ input.type }}" class="form-control text-right" id="{{ input.name }}" name="{{ input.name }}" placeholder="{{ input.label }}">
+                        {% endif %}
                     </div>
                     {% endfor %}
                     {% if data.hidden_input_value != None %}

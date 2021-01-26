@@ -4,9 +4,9 @@ def getSMSOpt1PageData():
     data = {}
     data['title'] = 'Cascade SMS Opt 1'
     data['inputs'] = [
-        { 'label': "Elevasi Awal", 'name': 'h0', 'type': 'text' },
+        { 'label': "Elevasi Awal", 'name': 'h0', 'type': 'number', 'min': 600, 'max': 622, 'step': 0.1 },
         { 'label': "Inflow Selorejo", 'name': 'q_in', 'type': 'text' },
-        { 'label': "Outflow Selorejo", 'name': 'Qout', 'type': 'text' },
+        { 'label': "Outflow Selorejo", 'name': 'Qout', 'type': 'number', 'min': 6.33, 'max': 16.67, 'step': 0.1 },
         { 'label': "Suplesi Siman", 'name': 'suplesi', 'type': 'text' },
         { 'label': "Time Frame", 'name': 't', 'type': 'text' }
     ]
@@ -41,7 +41,7 @@ def getSMSOpt2PageData():
     data = {}
     data['title'] = 'Cascade SMS Opt 2'
     data['inputs'] = [
-        { 'label': "Elevasi Awal", 'name': 'h0', 'type': 'text' },
+        { 'label': "Elevasi Awal", 'name': 'h0', 'type': 'number', 'min': 600, 'max': 622, 'step': 0.1 },
         { 'label': "Elevasi Akhir", 'name': 'ht', 'type': 'text' },
         { 'label': "Inflow Selorejo", 'name': 'q_in', 'type': 'text' },
         { 'label': "Suplesi Siman", 'name': 'suplesi', 'type': 'text' },
