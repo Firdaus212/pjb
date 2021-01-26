@@ -224,3 +224,21 @@ def download(folder, filename):
         return send_file(folder_name + '\\' +filename, as_attachment=True)
     else:
         return make_response(jsonify({'status': 'error', 'msg': 'File not found'}), 400, headers)  
+
+@main.route('/empty_table/<string:area>', methods=['GET'])
+def empty_table(area):
+    record_deleted = -1
+    if area == 'sms1':
+        record_deleted = db.session.query(SMS1).delete()
+        db.session.commit()
+    elif area == 'sms2':
+        record_deleted = db.session.query(SMS2).delete()
+        db.session.commit()
+    elif area == 'sutami-wlingi':
+        record_deleted = db.session.query(SutamiWlingi).delete()
+        db.session.commit()
+    elif area == 'sengguruh':
+        record_deleted = db.session.query(Sengguruh).delete()
+        db.session.commit()
+    
+    return make_response(jsonify({'record_deleted': record_deleted}), 200, headers) 

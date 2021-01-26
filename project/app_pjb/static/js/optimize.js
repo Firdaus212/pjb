@@ -1,12 +1,9 @@
 $(document).ready(function(){
     $('#execInfo').hide();
-    
-    var disableCalcBtn = function(){
-        $('#calcBtn').prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...');
-    }
 
-    var enableCalcBtn = function(){
-        $('#calcBtn').prop('disabled', false).html('<i class="fas fa-calculator"></i> Calculate');
+    var disableEnableCalcButton = function (status) { 
+        var text = status === true ? '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...' : '<i class="fas fa-calculator"></i> Calculate';
+        $('#calcBtn').prop('disabled', status).html(text);
     }
 
     $('#calcBtn').click(function(){
@@ -17,7 +14,7 @@ $(document).ready(function(){
             dataType: "JSON",
             timeout: 1000*60*10,
             beforeSend: function(){
-                disableCalcBtn();
+                disableEnableCalcButton(true);
                 $('#execInfo').hide();
             },
             success: function (response) {
@@ -31,7 +28,7 @@ $(document).ready(function(){
                 $( "#resultTable tbody tr td" ).each(function( ) {
                     $(this).html('err');
                 });
-                $('#calcBtn').prop('disabled', false).html('<i class="fas fa-calculator"></i> Calculate');
+                disableEnableCalcButton(false);
                 bs4Toast.error('Error!', jqXHR.responseJSON.msg, {
                     delay : 1500,
                     bodyClasses : ['text-white', 'bg-danger'],
@@ -42,7 +39,7 @@ $(document).ready(function(){
                 });
             },
             complete: function(){
-                enableCalcBtn();
+                disableEnableCalcButton(false);
             }
         });
     });

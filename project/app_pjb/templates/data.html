@@ -3,9 +3,14 @@
 {% block content %}
 <div class="row">
   <div class="col-12">
-    <div class="card">
-      <div class="card-header">
-        Data 
+    <div class="card border-warning">
+      <div class="card-header text-white bg-warning">
+        <div class="row">
+          <div class="col-10">{{ data.title }}</div>
+          <div class="col-2 text-right">
+            <button id="emptyBtn" class="btn btn-sm btn-danger btn-round"><i class="fa fa-trash-alt"></i></button>
+          </div>
+        </div> 
       </div>
       <div class="card-body" style="overflow: auto;">
         <table id="table_id" class="table table-dark" data-area={{ data.area }}>

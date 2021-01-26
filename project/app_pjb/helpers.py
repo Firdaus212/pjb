@@ -133,18 +133,22 @@ def getTableColumnData(area):
     data = {}
 
     if area == "sms1":
+        data['title'] = "SMS 1 Optimization Data" 
         data['column'] = [c['id'] for c in getSMSOpt1PageData()['columns']]
         data['col_to_disp'] = [c['name'] for c in getSMSOpt1PageData()['inputs']]
         data['area'] = 'sms1'
     elif area == "sms2":
+        data['title'] = "SMS 2 Optimization Data"
         data['column'] = [c['id'] for c in getSMSOpt2PageData()['columns']]
         data['col_to_disp'] = [c['name'] for c in getSMSOpt2PageData()['inputs']]
         data['area'] = 'sms2'
     elif area == "sutami-wlingi":
+        data['title'] = "Sutami Wlingi 1 Optimization Data"
         data['column'] = [c['id'] for c in getSutamiWlingiOptPageData()['columns']]
         data['col_to_disp'] = [c['name'] for c in getSutamiWlingiOptPageData()['inputs']]
         data['area'] = 'sutami-wlingi'
     elif area == "sengguruh":
+        data['title'] = "Sengguruh 1 Optimization Data"
         data['column'] = [c['id'] for c in getSengguruhOptPageData()['columns']]
         # data['col_to_disp'] = [c['name'] for c in getSengguruhOptPageData()['inputs']]
         data['col_to_disp'] = [c['name'] for c in getSengguruhOptPageData()['inputs']]
