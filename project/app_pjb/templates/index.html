@@ -4,21 +4,15 @@
 {% if current_user.is_authenticated %}
 <div class="row welcome"> 
   <div class="offset-1 col-11">
-    <h4 class="card-text text-white ">Welcome, <span>{{ name }}<span></h4>
+    <h6 class="card-text text-white ">Welcome, <span>{{ name }}<span></h6>
   </div>
 </div>
 {% endif %}
 <div class="row">
-  <div class="offset-1 col-11">
-    <h1 class="card-title text-white">
-      PT Pembangkitan Jawa Bali
-    </h1>
-    <h2 class="card-text text-white">
-      Aplikasi Kalkulasi
-    </h2>
-    <h3 class="card-text text-white">
-      Brantas Hydro Powerplant Optimization
-    </h3>
+  <div class="offset-1 col-11 app-title">
+    <h1 class="card-title text-white"> PT Pembangkitan Jawa Bali </h1>
+    <h2 class="card-text text-white"> Aplikasi Kalkulasi </h2>
+    <h3 class="card-text text-white"> Brantas Hydro Powerplant Optimization </h3>
   </div>
 </div>
 {% endblock %}

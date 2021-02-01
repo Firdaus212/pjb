@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import Blueprint, render_template, redirect, url_for, request, flash, make_response, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from .models import User
@@ -6,10 +6,12 @@ from . import db
 
 auth = Blueprint('auth', __name__)
 
+headers = {"Content-Type": "application/json"}
+
 @auth.route('/login')
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.not_found'))
     return render_template('login.html')
 
 @auth.route('/login', methods=['POST'])
@@ -31,10 +33,14 @@ def login_post():
 
 @auth.route('/signup')
 def signup():
+    if User.query.count() > 0:
+        return redirect(url_for('main.not_found'))
     return render_template('signup.html')
 
 @auth.route('/signup', methods=['POST'])
 def signup_post():
+    if User.query.count() > 0:
+        return make_response(jsonify({'msg': 'Not Found'}), 404, headers) 
     email = request.form.get('email')
     name = request.form.get('name')
     password = request.form.get('password')

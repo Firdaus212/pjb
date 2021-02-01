@@ -12,11 +12,16 @@
                     {% for input in data.inputs %}
                     <div class="form-group">
                         <label for="{{ input.name }}">{{ input.label }}</label>
-                        {% if input.type == 'number' %}
-                            <input type="number" min="{{ input.min }}" max="{{ input.max }}" step="{{ input.step }}" class="form-control text-right" id="{{ input.name }}" name="{{ input.name }}" placeholder="{{ input.label }}">
-                        {% else %}
-                            <input type="{{ input.type }}" class="form-control text-right" id="{{ input.name }}" name="{{ input.name }}" placeholder="{{ input.label }}">
-                        {% endif %}
+                        <div class="input-group mb-3">
+                            {% if input.type == 'number' %}
+                                <input type="number" min="{{ input.min }}" max="{{ input.max }}" step="{{ input.step }}" class="form-control text-right" id="{{ input.name }}" name="{{ input.name }}" placeholder="{{ input.label }}">
+                            {% else %}
+                                <input type="{{ input.type }}" class="form-control text-right" id="{{ input.name }}" name="{{ input.name }}" placeholder="{{ input.label }}">
+                            {% endif %}
+                            <div class="input-group-append">
+                                <span class="input-group-text">{{ input.unit | safe }}</span>
+                            </div>
+                        </div>
                     </div>
                     {% endfor %}
                     {% if data.hidden_input_value != None %}
@@ -43,7 +48,7 @@
                         {% for column in data.columns %}
                         <tr>
                             <th scope="row">{{ column.label }}</th>
-                            <td id="{{ column.id }}" class="text-right">0.0</td>
+                            <td id="{{ column.id }}" class="text-right"><span class="value">0.0</span> <span>{{ column.unit | safe }}</span></td>
                         </tr>
                         {% endfor %}
                     </tbody>

@@ -30,14 +30,14 @@ $(document).ready(function(){
             },
             success: function (response) {
                 $.each(response.data, function (key, value) { 
-                    $('#resultTable #'+key).text(value.toFixed(2).toString()); 
+                    $('#resultTable #'+key+' .value').text(value.toFixed(2).toString()); 
                 });
                 $('#execInfo').show();
                 $('#execInfo').html('Calculation time : '+response.exec_time+' s');
             },
             error: function(jqXHR, textStatus, errorThrown){
-                $( "#resultTable tbody tr td" ).each(function( ) {
-                    $(this).html('err');
+                $( "#resultTable tbody tr td .value" ).each(function( ) {
+                    $(this).html('<span class="text-danger">err</span>');
                 });
                 disableEnableCalcButton(false);
                 bs4Toast.error('Error!', jqXHR.responseJSON.msg, {

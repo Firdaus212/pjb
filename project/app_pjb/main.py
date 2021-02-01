@@ -6,9 +6,10 @@ import io, time, os, re
 from .helpers import *
 
 main = Blueprint('main', __name__)
-matlab_file_path_selorejo = r''+os.getcwd()+r'\app_pjb\matlab_files\selorejo'
-matlab_file_path_sengguruh = r''+os.getcwd()+r'\app_pjb\matlab_files\sengguruh'
-matlab_file_path_sutami = r''+os.getcwd()+r'\app_pjb\matlab_files\sutami'
+base_app_path = os.path.abspath(os.path.dirname(__file__)).replace('\\', '/')
+matlab_file_path_selorejo = base_app_path + '/matlab_files/selorejo'
+matlab_file_path_sengguruh = base_app_path + '/matlab_files/sengguruh'
+matlab_file_path_sutami = base_app_path + '/matlab_files/sutami'
 headers = {"Content-Type": "application/json"}
 
 def generateInsertData(result, area):
@@ -71,7 +72,7 @@ def performOptimization(resp_dict, post_data, area):
                 result = eng.opt(conv_res, nargout=1)
             elif area == 'sengguruh':
                 eng.addpath(matlab_file_path_sengguruh)
-                result = eng.opt_senguruh(conv_res, nargout=1)
+                result = eng.opt_sengguruh(conv_res, nargout=1)
             # eng.quit()
         except Exception as e:
             resp_dict['msg'] = str(e)
@@ -115,7 +116,7 @@ def data(area):
     return render_template('data.html', data=data)
 
 @main.route('/not_found')
-@login_required
+# @login_required
 def not_found():
     return render_template('404.html', data=data)
 
@@ -184,6 +185,7 @@ def optimize():
         'error': True,
         'data': {},
         'msg' : '',
+        'msgs' : matlab_file_path_sengguruh,
         'exec_time': -1
     }
 

@@ -78,21 +78,36 @@
             </ul>
         </div>
     </nav>
+    {% if request.endpoint == 'main.index' or request.endpoint == 'auth.login' %}
+        {% if current_user.is_authenticated %}
+            {% set bg_class = 'bg-2' %}
+        {% else %}
+            {% set bg_class = 'bg' %}
+        {% endif %}
+    {% endif %}
 
-    <div class="container-fluid" style="padding-top: 20px;min-height: 78vh;">
-        {% block content %}
-        {% endblock %}
-    </div>
+    <div class="{{ bg_class }}">
 
-    <!-- Footer -->
-    <footer class="page-footer font-small blue pt-4">
-        <!-- Copyright -->
-        <div class="footer-copyright text-center text-white py-3">© 2020 Copyright:
-        <a href="https://www.ptpjb.com/" style="color: yellow"> PT PJB - PT Pembangkitan Jawa Bali </a>
+        <div class="layer">
+
+        <div class="container-fluid" style="padding-top: 20px;min-height: 78vh;">
+            {% block content %}
+            {% endblock %}
         </div>
-        <!-- Copyright -->
-    </footer>
-    <!-- Footer -->
+
+        <!-- Footer -->
+        <footer class="page-footer font-small blue pt-4">
+            <!-- Copyright -->
+            <div class="footer-copyright text-center text-white py-3">© 2020 Copyright:
+            <a href="https://www.ptpjb.com/" style="color: yellow"> PT PJB - PT Pembangkitan Jawa Bali </a>
+            </div>
+            <!-- Copyright -->
+        </footer>
+        <!-- Footer -->
+
+        </div>
+
+    </div>
 
     <!-- JQuery -->
     <script src="{{ url_for('static', filename='bootstrap/jquery-3.5.1.min.js') }}"></script>

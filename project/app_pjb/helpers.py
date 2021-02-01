@@ -1,36 +1,39 @@
 from flask import url_for
 
+# There are some html entities used to display the unit of measurement
+# See https://www.freeformatter.com/html-entities.html to get more details 
+
 def getSMSOpt1PageData():
     data = {}
     data['title'] = 'Cascade SMS Opt 1'
     data['inputs'] = [
-        { 'label': "Elevasi Awal", 'name': 'h0', 'type': 'number', 'min': 600, 'max': 622, 'step': 0.1 },
-        { 'label': "Inflow Selorejo", 'name': 'q_in', 'type': 'text' },
-        { 'label': "Outflow Selorejo", 'name': 'Qout', 'type': 'number', 'min': 6.33, 'max': 16.67, 'step': 0.1 },
-        { 'label': "Suplesi Siman", 'name': 'suplesi', 'type': 'text' },
-        { 'label': "Time Frame", 'name': 't', 'type': 'text' }
+        { 'label': "Elevasi Awal", 'name': 'h0', 'type': 'number', 'min': 600, 'max': 622, 'step': 0.1, 'unit': 'mdpl'  },
+        { 'label': "Inflow Selorejo", 'name': 'q_in', 'type': 'text', 'unit': 'm&sup3;/s' },
+        { 'label': "Outflow Selorejo", 'name': 'Qout', 'type': 'number', 'min': 6.33, 'max': 16.67, 'step': 0.1, 'unit': 'm&sup3;/s' },
+        { 'label': "Suplesi Siman", 'name': 'suplesi', 'type': 'text', 'unit': 'm&sup3;/s' },
+        { 'label': "Time Frame", 'name': 't', 'type': 'text', 'unit': 'jam' }
     ]
     data['columns'] = [
-        { 'label': 'Inflow', 'id': 'inflow' },
-        { 'label': 'Elevasi Awal', 'id': 'elevasi_awal' },
-        { 'label': 'Elevasi Akhir', 'id': 'elevasi_akhir' },
-        { 'label': 'Outflow Selorejo', 'id': 'outflow_selorejo' },
-        { 'label': 'Daya Output Selorejo', 'id': 'daya_output_selorejo' },
-        { 'label': 'Energi Output Selorejo', 'id': 'energi_output_selorejo' },
-        { 'label': 'Inflow Mendalan', 'id': 'inflow_mendalan' },
-        { 'label': 'Daya Output Mendalan #1', 'id': 'daya_output_mendalan_1' },
-        { 'label': 'Daya Output Mendalan #2', 'id': 'daya_output_mendalan_2' },
-        { 'label': 'Daya Output Mendalan #3', 'id': 'daya_output_mendalan_3' },
-        { 'label': 'Daya Output Mendalan #4', 'id': 'daya_output_mendalan_4' },
-        { 'label': 'Total Daya Output Mendalan', 'id': 'total_daya_output_mendalan' },
-        { 'label': 'Energi Output Mendalan', 'id': 'energi_output_mendalan' },
-        { 'label': 'Suplesi', 'id': 'suplesi' },
-        { 'label': 'Inflow Siman', 'id': 'inflow_siman' },
-        { 'label': 'Daya Output Siman #1', 'id': 'daya_output_siman_1' },
-        { 'label': 'Daya Output Siman #2', 'id': 'daya_output_siman_2' },
-        { 'label': 'Daya Output Siman #3', 'id': 'daya_output_siman_3' },
-        { 'label': 'Total Daya Output Siman', 'id': 'total_daya_output_siman' },
-        { 'label': 'Energi Output Siman', 'id': 'energi_output_siman' }
+        { 'label': 'Inflow', 'id': 'inflow', 'unit': 'm&sup3;/s' },
+        { 'label': 'Elevasi Awal', 'id': 'elevasi_awal', 'unit': 'mdpl' },
+        { 'label': 'Elevasi Akhir', 'id': 'elevasi_akhir', 'unit': 'mdpl' },
+        { 'label': 'Outflow Selorejo', 'id': 'outflow_selorejo', 'unit': 'm&sup3;/s' },
+        { 'label': 'Daya Output Selorejo', 'id': 'daya_output_selorejo', 'unit': 'MW' },
+        { 'label': 'Energi Output Selorejo', 'id': 'energi_output_selorejo', 'unit': 'MWh' },
+        { 'label': 'Inflow Mendalan', 'id': 'inflow_mendalan', 'unit': 'm&sup3;/s' },
+        { 'label': 'Daya Output Mendalan #1', 'id': 'daya_output_mendalan_1', 'unit': 'MW' },
+        { 'label': 'Daya Output Mendalan #2', 'id': 'daya_output_mendalan_2', 'unit': 'MW' },
+        { 'label': 'Daya Output Mendalan #3', 'id': 'daya_output_mendalan_3', 'unit': 'MW' },
+        { 'label': 'Daya Output Mendalan #4', 'id': 'daya_output_mendalan_4', 'unit': 'MW' },
+        { 'label': 'Total Daya Output Mendalan', 'id': 'total_daya_output_mendalan', 'unit': 'MW' },
+        { 'label': 'Energi Output Mendalan', 'id': 'energi_output_mendalan', 'unit': 'MWh' },
+        { 'label': 'Suplesi', 'id': 'suplesi', 'unit': 'm&sup3;/s' },
+        { 'label': 'Inflow Siman', 'id': 'inflow_siman', 'unit': 'm&sup3;/s' },
+        { 'label': 'Daya Output Siman #1', 'id': 'daya_output_siman_1', 'unit': 'MW' },
+        { 'label': 'Daya Output Siman #2', 'id': 'daya_output_siman_2', 'unit': 'MW' },
+        { 'label': 'Daya Output Siman #3', 'id': 'daya_output_siman_3', 'unit': 'MW' },
+        { 'label': 'Total Daya Output Siman', 'id': 'total_daya_output_siman', 'unit': 'MW' },
+        { 'label': 'Energi Output Siman', 'id': 'energi_output_siman', 'unit': 'MWh' }
     ]
     data['hidden_input_value'] = 'sms1'
     data['js'] = 'optimize.js'
@@ -41,33 +44,33 @@ def getSMSOpt2PageData():
     data = {}
     data['title'] = 'Cascade SMS Opt 2'
     data['inputs'] = [
-        { 'label': "Elevasi Awal", 'name': 'h0', 'type': 'number', 'min': 600, 'max': 622, 'step': 0.1 },
-        { 'label': "Elevasi Akhir", 'name': 'ht', 'type': 'text' },
-        { 'label': "Inflow Selorejo", 'name': 'q_in', 'type': 'text' },
-        { 'label': "Suplesi Siman", 'name': 'suplesi', 'type': 'text' },
-        { 'label': "Time Frame", 'name': 't', 'type': 'text' }
+        { 'label': "Elevasi Awal", 'name': 'h0', 'type': 'number', 'min': 600, 'max': 622, 'step': 0.1, 'unit': 'mdpl' },
+        { 'label': "Elevasi Akhir", 'name': 'ht', 'type': 'text', 'unit': 'mdpl' },
+        { 'label': "Inflow Selorejo", 'name': 'q_in', 'type': 'text', 'unit': 'm&sup3;/s' },
+        { 'label': "Suplesi Siman", 'name': 'suplesi', 'type': 'text', 'unit': 'm&sup3;/s' },
+        { 'label': "Time Frame", 'name': 't', 'type': 'text', 'unit': 'jam' }
     ]
     data['columns'] = [
-        { 'label': 'Inflow', 'id': 'inflow' },
-        { 'label': 'Elevasi Awal', 'id': 'elevasi_awal' },
-        { 'label': 'Elevasi Akhir', 'id': 'elevasi_akhir' },
-        { 'label': 'Outflow Selorejo', 'id': 'outflow_selorejo' },
-        { 'label': 'Daya Output Selorejo', 'id': 'daya_output_selorejo' },
-        { 'label': 'Energi Output Selorejo', 'id': 'energi_output_selorejo' },
-        { 'label': 'Inflow Mendalan', 'id': 'inflow_mendalan' },
-        { 'label': 'Daya Output Mendalan #1', 'id': 'daya_output_mendalan_1' },
-        { 'label': 'Daya Output Mendalan #2', 'id': 'daya_output_mendalan_2' },
-        { 'label': 'Daya Output Mendalan #3', 'id': 'daya_output_mendalan_3' },
-        { 'label': 'Daya Output Mendalan #4', 'id': 'daya_output_mendalan_4' },
-        { 'label': 'Total Daya Output Mendalan', 'id': 'total_daya_output_mendalan' },
-        { 'label': 'Energi Output Mendalan', 'id': 'energi_output_mendalan' },
-        { 'label': 'Suplesi', 'id': 'suplesi' },
-        { 'label': 'Inflow Siman', 'id': 'inflow_siman' },
-        { 'label': 'Daya Output Siman #1', 'id': 'daya_output_siman_1' },
-        { 'label': 'Daya Output Siman #2', 'id': 'daya_output_siman_2' },
-        { 'label': 'Daya Output Siman #3', 'id': 'daya_output_siman_3' },
-        { 'label': 'Total Daya Output Siman', 'id': 'total_daya_output_siman' },
-        { 'label': 'Energi Output Siman', 'id': 'energi_output_siman' }
+        { 'label': 'Inflow', 'id': 'inflow', 'unit': 'm&sup3;/s' },
+        { 'label': 'Elevasi Awal', 'id': 'elevasi_awal', 'unit': 'mdpl' },
+        { 'label': 'Elevasi Akhir', 'id': 'elevasi_akhir', 'unit': 'mdpl' },
+        { 'label': 'Outflow Selorejo', 'id': 'outflow_selorejo', 'unit': 'm&sup3;/s' },
+        { 'label': 'Daya Output Selorejo', 'id': 'daya_output_selorejo', 'unit': 'MW' },
+        { 'label': 'Energi Output Selorejo', 'id': 'energi_output_selorejo', 'unit': 'MWh' },
+        { 'label': 'Inflow Mendalan', 'id': 'inflow_mendalan', 'unit': 'm&sup3;/s' },
+        { 'label': 'Daya Output Mendalan #1', 'id': 'daya_output_mendalan_1', 'unit': 'MW' },
+        { 'label': 'Daya Output Mendalan #2', 'id': 'daya_output_mendalan_2', 'unit': 'MW' },
+        { 'label': 'Daya Output Mendalan #3', 'id': 'daya_output_mendalan_3', 'unit': 'MW' },
+        { 'label': 'Daya Output Mendalan #4', 'id': 'daya_output_mendalan_4', 'unit': 'MW' },
+        { 'label': 'Total Daya Output Mendalan', 'id': 'total_daya_output_mendalan', 'unit': 'MW' },
+        { 'label': 'Energi Output Mendalan', 'id': 'energi_output_mendalan', 'unit': 'MWh' },
+        { 'label': 'Suplesi', 'id': 'suplesi', 'unit': 'm&sup3;/s' },
+        { 'label': 'Inflow Siman', 'id': 'inflow_siman', 'unit': 'm&sup3;/s' },
+        { 'label': 'Daya Output Siman #1', 'id': 'daya_output_siman_1', 'unit': 'MW' },
+        { 'label': 'Daya Output Siman #2', 'id': 'daya_output_siman_2', 'unit': 'MW' },
+        { 'label': 'Daya Output Siman #3', 'id': 'daya_output_siman_3', 'unit': 'MW' },
+        { 'label': 'Total Daya Output Siman', 'id': 'total_daya_output_siman', 'unit': 'MW' },
+        { 'label': 'Energi Output Siman', 'id': 'energi_output_siman', 'unit': 'MWh' }
     ]
     data['hidden_input_value'] = 'sms2'
     data['js'] = 'optimize.js'
@@ -78,31 +81,31 @@ def getSutamiWlingiOptPageData():
     data = {}
     data['title'] = 'Cascade Sutami-Wlingi Opt'
     data['inputs'] = [
-        { 'label': "Elevasi Awal", 'name': 'elevasi_awal', 'type': 'text' },
-        { 'label': "Elevasi Akhir", 'name': 'elevasi_akhir', 'type': 'text' },
-        { 'label': "Inflow", 'name': 'inflow', 'type': 'text' },
-        { 'label': "Beban Wlingi", 'name': 'beban_wlingi', 'type': 'text' },
-        { 'label': "Elevasi Real Wlingi", 'name': 'elevasi_real_wlingi', 'type': 'text' },
-        { 'label': "Elevasi Target Wlingi", 'name': 'elevasi_target_wlingi', 'type': 'text' },
-        { 'label': "Q Wlingi Yesterday", 'name': 'q_wlingi_yesterday', 'type': 'text' },
-        { 'label': "Jam Mati Wlingi Kemarin", 'name': 'jam_mati_wlingi_kemarin', 'type': 'text' }
+        { 'label': "Elevasi Awal", 'name': 'elevasi_awal', 'type': 'text', 'unit': 'mdpl' },
+        { 'label': "Elevasi Akhir", 'name': 'elevasi_akhir', 'type': 'text', 'unit': 'mdpl' },
+        { 'label': "Inflow", 'name': 'inflow', 'type': 'text', 'unit': 'm&sup3;/s' },
+        { 'label': "Beban Wlingi", 'name': 'beban_wlingi', 'type': 'text', 'unit': 'MW' },
+        { 'label': "Elevasi Real Wlingi", 'name': 'elevasi_real_wlingi', 'type': 'text', 'unit': 'mdpl' },
+        { 'label': "Elevasi Target Wlingi", 'name': 'elevasi_target_wlingi', 'type': 'text', 'unit': 'mdpl' },
+        { 'label': "Q Wlingi Yesterday", 'name': 'q_wlingi_yesterday', 'type': 'text', 'unit': 'm&sup3;/s' },
+        { 'label': "Jam Mati Wlingi Kemarin", 'name': 'jam_mati_wlingi_kemarin', 'type': 'text', 'unit': 'jam' }
     ]
     data['columns'] = [
-        { 'label': 'Vol Tersedia', 'id': 'vol_tersedia' },
-        { 'label': 'Vol Used', 'id': 'vol_used' },
-        { 'label': 'Volume Sisa', 'id': 'volume_sisa' },
-        { 'label': 'Mean Beban Sutami #1', 'id': 'mean_beban_sutami_1' },
-        { 'label': 'Mean Beban Sutami #2', 'id': 'mean_beban_sutami_2' },
-        { 'label': 'Mean Beban Sutami #3', 'id': 'mean_beban_sutami_3' },
-        { 'label': 'Sum Beban Sutami #1', 'id': 'sum_beban_sutami_1' },
-        { 'label': 'Sum Beban Sutami #2', 'id': 'sum_beban_sutami_2' },
-        { 'label': 'Sum Beban Sutami #3', 'id': 'sum_beban_sutami_3' },
-        { 'label': 'Beban Total Sutami', 'id': 'beban_total_sutami' },
-        { 'label': 'Beban Total Wlingi', 'id': 'beban_total_wlingi' },
-        { 'label': 'Jam Mulai Operasi Today', 'id': 'jam_mulai_operasi_today' },
-        { 'label': 'Jam Mati Operasi Wlingi', 'id': 'jam_mati_operasi_wlingi' },
-        { 'label': 'Waktu Operasi Wlingi', 'id': 'waktu_operasi_wlingi' },
-        { 'label': 'Energi Cascade', 'id': 'energi_cascade' },
+        { 'label': 'Vol Tersedia', 'id': 'vol_tersedia', 'unit': 'm&sup3;' },
+        { 'label': 'Vol Used', 'id': 'vol_used', 'unit': 'm&sup3;' },
+        { 'label': 'Volume Sisa', 'id': 'volume_sisa', 'unit': 'm&sup3;' },
+        { 'label': 'Mean Beban Sutami #1', 'id': 'mean_beban_sutami_1', 'unit': 'MW' },
+        { 'label': 'Mean Beban Sutami #2', 'id': 'mean_beban_sutami_2', 'unit': 'MW' },
+        { 'label': 'Mean Beban Sutami #3', 'id': 'mean_beban_sutami_3', 'unit': 'MW' },
+        { 'label': 'Sum Beban Sutami #1', 'id': 'sum_beban_sutami_1', 'unit': 'MW' },
+        { 'label': 'Sum Beban Sutami #2', 'id': 'sum_beban_sutami_2', 'unit': 'MW' },
+        { 'label': 'Sum Beban Sutami #3', 'id': 'sum_beban_sutami_3', 'unit': 'MW' },
+        { 'label': 'Beban Total Sutami', 'id': 'beban_total_sutami', 'unit': 'MW' },
+        { 'label': 'Beban Total Wlingi', 'id': 'beban_total_wlingi', 'unit': 'MW' },
+        { 'label': 'Jam Mulai Operasi Today', 'id': 'jam_mulai_operasi_today', 'unit': 'jam' },
+        { 'label': 'Jam Mati Operasi Wlingi', 'id': 'jam_mati_operasi_wlingi', 'unit': 'jam' },
+        { 'label': 'Waktu Operasi Wlingi', 'id': 'waktu_operasi_wlingi', 'unit': 'jam' },
+        { 'label': 'Energi Cascade', 'id': 'energi_cascade', 'unit': 'MWh' },
        
     ]
     data['hidden_input_value'] = 'sutami-wlingi'
@@ -114,15 +117,15 @@ def getSengguruhOptPageData():
     data = {}
     data['title'] = 'Cascade Sengguruh Opt'
     data['inputs'] = [
-        { 'label': "Inflow Sengguruh", 'name': 'inflow_sengguruh', 'type': 'text' }
+        { 'label': "Inflow Sengguruh", 'name': 'inflow_sengguruh', 'type': 'text', 'unit': 'm&sup3;/s' }
     ]
     data['columns'] = [
-        { 'label': 'Daya Output Sengguruh #1', 'id': 'beban_1' },
-        { 'label': 'Daya Output Sengguruh #2', 'id': 'beban_2' },
-        { 'label': 'Energi Output Sengguruh #1', 'id': 'energi_1' },
-        { 'label': 'Energi Output Sengguruh #2', 'id': 'energi_2' },
-        { 'label': 'Total Daya Output Sengguruh', 'id': 'total_beban' },
-        { 'label': 'Total Energi Output Sengguruh', 'id': 'total_energi' }
+        { 'label': 'Daya Output Sengguruh #1', 'id': 'beban_1', 'unit': 'MW' },
+        { 'label': 'Daya Output Sengguruh #2', 'id': 'beban_2', 'unit': 'MW' },
+        { 'label': 'Energi Output Sengguruh #1', 'id': 'energi_1', 'unit': 'MWh' },
+        { 'label': 'Energi Output Sengguruh #2', 'id': 'energi_2', 'unit': 'MWh' },
+        { 'label': 'Total Daya Output Sengguruh', 'id': 'total_beban', 'unit': 'MW' },
+        { 'label': 'Total Energi Output Sengguruh', 'id': 'total_energi', 'unit': 'MWh' }
     ]
     data['hidden_input_value'] = 'sengguruh'
     data['js'] = 'optimize.js'
