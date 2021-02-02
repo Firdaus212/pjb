@@ -6,6 +6,24 @@ function result = sms2(input)
     t = input.t;
     suplesi = input.suplesi;
 
+    M = xlsread('performanceMS','mendalan','A1:K5');
+    PM1 = M(:,1);
+    QM1 = M(:,2);
+    PM2 = M(:,4);
+    QM2 = M(:,5);
+    PM3 = M(:,7);
+    QM3 = M(:,8);
+    PM4 = M(:,10);
+    QM4 = M(:,11);
+
+    S = xlsread('performanceMS','siman','A1:H5');
+    PS1 = S(:,1);
+    QS1 = S(:,2);
+    PS2 = S(:,4);
+    QS2 = S(:,5);
+    PS3 = S(:,7);
+    QS3 = S(:,8);
+
     data_waduk = xlsread('data_waduk','aa','A2:B240');
     data_elevasi = data_waduk(:,1);
     data_vol = data_waduk(:,2);
@@ -24,7 +42,13 @@ function result = sms2(input)
     ele=fit(data_vol,data_elevasi,'poly9');
     fQ=fit([H, P],Q,'poly55');
     fP=fit([H, Q],P,'poly54');
-
+    Pm1=fit(QM1,PM1,'poly4');
+    Pm2=fit(QM2,PM2,'poly4');
+    Pm3=fit(QM3,PM3,'poly4');
+    Pm4=fit(QM4,PM4,'poly4');
+    Ps1=fit(QS1,PS1,'poly4');
+    Ps2=fit(QS2,PS2,'poly4');
+    Ps3=fit(QS3,PS3,'poly4');
     v0=vol(h0);
     vt=vol(ht);
     vop=v0-vt+(q_in*t*3600);
@@ -59,25 +83,25 @@ function result = sms2(input)
     q_m_stok=Qin_m/on_m;
 
     if ismember(Turbin_m,m1)
-        Pm_1=((-223.34*(q_m_stok.^2))+(2834.7*q_m_stok)-3632)/1000;
+        Pm_1=Pm1(q_m_stok);
     else
         Pm_1=0;
     end
 
     if ismember(Turbin_m,m2)
-        Pm_2=((-94.658*(q_m_stok.^2))+(2062.3*q_m_stok)-2025.7)/1000;
+        Pm_2=Pm2(q_m_stok);
     else
         Pm_2=0;
     end
 
     if ismember(Turbin_m,m3)
-        Pm_3=((-91.518*(q_m_stok.^2))+(2071*q_m_stok)-2091.5)/1000;
+        Pm_3=Pm3(q_m_stok);
     else
         Pm_3=0;
     end
 
     if ismember(Turbin_m,m4)
-        Pm_4=((-130.28*(q_m_stok.^2))+(2276.5*q_m_stok)-2039.7)/1000;
+        Pm_4=Pm4(q_m_stok);
     else
         Pm_4=0;
     end
@@ -100,19 +124,19 @@ function result = sms2(input)
     q_s_stok=Qin_smn/on_s;
 
     if ismember(Turbin_s,s1)
-        Ps_1=(-51.836*(q_s_stok.^2) + (1316*q_s_stok) - 1045)/1000;
+        Ps_1=Ps1(q_s_stok);
     else
         Ps_1=0;
     end
 
     if ismember(Turbin_s,s2)
-        Ps_2=(-97.66*(q_s_stok.^2) + (1559.4*q_s_stok) - 1307.1)/1000;
+        Ps_2=Ps2(q_s_stok);
     else
         Ps_2=0;
     end
 
     if ismember(Turbin_s,s3)
-        Ps_3=(-55.813*(q_s_stok.^2) + (1306.2*q_s_stok) - 1307.1)/1000;
+        Ps_3=Ps3(q_s_stok);
     else
         Ps_3=0;
     end

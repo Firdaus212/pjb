@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <title>PT PJB - PT Pembangkitan Jawa Bali</title>
+  <meta name="description" content="Hydro Powerplant Optimization">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
@@ -31,32 +32,36 @@
                     <a class="nav-link" href="{{ url_for('main.index') }}">Home <span class="sr-only">(current)</span></a>
                 </li>
                 {% if current_user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('main.optimization', area='sms1' ) }}">Cascade SMS Opt 1</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownSms" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Cascade SMS Opt
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownSms">
+                      <a class="dropdown-item" href="{{ url_for('main.optimization', area='sms1') }}">Cascade SMS Opt 1</a>
+                      <a class="dropdown-item" href="{{ url_for('main.optimization', area='sms2') }}">Cascade SMS Opt 2</a>
+                    </div>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('main.optimization', area='sms2' ) }}">Cascade SMS Opt 2</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('main.optimization', area='sutami-wlingi' ) }}">Cascade Sutami-Wlingi Opt</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownSutami" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Cascade Sutami-Wlingi Opt
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownSutami">
+                      <a class="dropdown-item" href="{{ url_for('main.optimization', area='sutami_wlingi_basah') }}">Cascade Sutami-Wlingi Basah Opt</a>
+                      <a class="dropdown-item" href="{{ url_for('main.optimization', area='sutami_wlingi_kering') }}">Cascade Sutami-Wlingi Kering Opt</a>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('main.optimization', area='sengguruh' ) }}">Sengguruh Opt</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownOptData" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       Opt Data
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownOptData">
                       <a class="dropdown-item" href="{{ url_for('main.data', area='sms1') }}">SMS 1</a>
                       <a class="dropdown-item" href="{{ url_for('main.data', area='sms2') }}">SMS 2</a>
-                      <a class="dropdown-item" href="{{ url_for('main.data', area='sutami-wlingi') }}">Sutami Wlingi</a>
-                      <a class="dropdown-item" href="{{ url_for('main.data', area='sengguruh') }}">Sengguruh</a>
                     </div>
                 </li>
-                <!-- <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('main.data', area='ok') }}">Data</a>
-                </li> -->
                 <!-- <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('main.profile') }}">Profile</a>
                 </li> -->

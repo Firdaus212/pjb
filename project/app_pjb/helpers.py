@@ -2,6 +2,14 @@ from flask import url_for
 
 # There are some html entities used to display the unit of measurement
 # See https://www.freeformatter.com/html-entities.html to get more details 
+area_sms_1 = 'sms1'
+area_sms_2 = 'sms2'
+area_sutami_wlingi_basah = 'sutami_wlingi_basah'
+area_sutami_wlingi_kering = 'sutami_wlingi_kering'
+area_sengguruh = 'sengguruh'
+js_optimize_file = 'optimize.js'
+js_data_file = 'data.js'
+
 
 def getSMSOpt1PageData():
     data = {}
@@ -35,8 +43,8 @@ def getSMSOpt1PageData():
         { 'label': 'Total Daya Output Siman', 'id': 'total_daya_output_siman', 'unit': 'MW' },
         { 'label': 'Energi Output Siman', 'id': 'energi_output_siman', 'unit': 'MWh' }
     ]
-    data['hidden_input_value'] = 'sms1'
-    data['js'] = 'optimize.js'
+    data['hidden_input_value'] = area_sms_1
+    data['js'] = js_optimize_file
     data['data_url'] = url_for('main.optimize')
     return data
 
@@ -72,18 +80,55 @@ def getSMSOpt2PageData():
         { 'label': 'Total Daya Output Siman', 'id': 'total_daya_output_siman', 'unit': 'MW' },
         { 'label': 'Energi Output Siman', 'id': 'energi_output_siman', 'unit': 'MWh' }
     ]
-    data['hidden_input_value'] = 'sms2'
-    data['js'] = 'optimize.js'
+    data['hidden_input_value'] = area_sms_2
+    data['js'] = js_optimize_file
     data['data_url'] = url_for('main.optimize')
     return data
 
-def getSutamiWlingiOptPageData():
+def getSutamiWlingiWetOptPageData():
     data = {}
-    data['title'] = 'Cascade Sutami-Wlingi Opt'
+    data['title'] = 'Cascade Sutami-Wlingi Basah Opt'
+    data['inputs'] = [
+        { 'label': "Elevasi Awal", 'name': 'elevasi_awal', 'type': 'text', 'unit': 'mdpl' },
+        { 'label': "Elevasi Akhir", 'name': 'elevasi_akhir', 'type': 'text', 'unit': 'mdpl' },
+        { 'label': "Inflow Minimum", 'name': 'inflow_min', 'type': 'text', 'unit': 'm&sup3;/s' },
+        { 'label': "Inflow Maximum", 'name': 'inflow_max', 'type': 'text', 'unit': 'm&sup3;/s' },
+        { 'label': "Jam Operasi Sutami 1", 'name': 't1', 'type': 'text', 'unit': 'jam' },
+        { 'label': "Jam Operasi Sutami 2", 'name': 't2', 'type': 'text', 'unit': 'jam' },
+        { 'label': "Jam Operasi Sutami 3", 'name': 't3', 'type': 'text', 'unit': 'jam' },
+        { 'label': "Elevasi Awal Wlingi", 'name': 'elevasi_awal_wlingi', 'type': 'text', 'unit': 'mdpl' },
+        { 'label': "Elevasi Akhir Wlingi", 'name': 'elevasi_akhir_wlingi', 'type': 'text', 'unit': 'mdpl' },
+        { 'label': "Remain Basin Minimum", 'name': 'r_basin_min', 'type': 'text', 'unit': 'm&sup3;/s' },
+        { 'label': "Remain Basin Maximum", 'name': 'r_basin_max', 'type': 'text', 'unit': 'm&sup3;/s' }
+        
+    ]
+    data['columns'] = [
+        { 'label': 'Mean Beban Sutami #1', 'id': 'beban_sutami_1_mean', 'unit': 'MW' },
+        { 'label': 'Mean Beban Sutami #2', 'id': 'beban_sutami_2_mean', 'unit': 'MW' },
+        { 'label': 'Mean Beban Sutami #3', 'id': 'beban_sutami_3_mean', 'unit': 'MW' },
+        { 'label': 'Energi Sutami #1', 'id': 'energi_sutami_1', 'unit': 'MWh' },
+        { 'label': 'Energi Sutami #2', 'id': 'energi_sutami_2', 'unit': 'MWh' },
+        { 'label': 'Energi Sutami #3', 'id': 'energi_sutami_3', 'unit': 'MWh' },
+        { 'label': 'Energi Total Sutami', 'id': 'energi_total_sutami', 'unit': 'MWh' },
+        { 'label': 'Beban Wlingi Perjam', 'id': 'beban_wlingi_perjam', 'unit': '' },
+        { 'label': 'Energi Wlingi', 'id': 'energi_wlingi', 'unit': 'MW' }
+       
+    ]
+    data['hidden_input_value'] = area_sutami_wlingi_basah
+    data['js'] = js_optimize_file
+    data['data_url'] = url_for('main.optimize')
+    return data
+
+def getSutamiWlingiDryOptPageData():
+    data = {}
+    data['title'] = 'Cascade Sutami-Wlingi Kering Opt'
     data['inputs'] = [
         { 'label': "Elevasi Awal", 'name': 'elevasi_awal', 'type': 'text', 'unit': 'mdpl' },
         { 'label': "Elevasi Akhir", 'name': 'elevasi_akhir', 'type': 'text', 'unit': 'mdpl' },
         { 'label': "Inflow", 'name': 'inflow', 'type': 'text', 'unit': 'm&sup3;/s' },
+        { 'label': "Jam Operasi Sutami 1", 'name': 't1', 'type': 'text', 'unit': 'jam' },
+        { 'label': "Jam Operasi Sutami 2", 'name': 't2', 'type': 'text', 'unit': 'jam' },
+        { 'label': "Jam Operasi Sutami 3", 'name': 't3', 'type': 'text', 'unit': 'jam' },
         { 'label': "Beban Wlingi", 'name': 'beban_wlingi', 'type': 'text', 'unit': 'MW' },
         { 'label': "Elevasi Real Wlingi", 'name': 'elevasi_real_wlingi', 'type': 'text', 'unit': 'mdpl' },
         { 'label': "Elevasi Target Wlingi", 'name': 'elevasi_target_wlingi', 'type': 'text', 'unit': 'mdpl' },
@@ -108,8 +153,8 @@ def getSutamiWlingiOptPageData():
         { 'label': 'Energi Cascade', 'id': 'energi_cascade', 'unit': 'MWh' },
        
     ]
-    data['hidden_input_value'] = 'sutami-wlingi'
-    data['js'] = 'optimize.js'
+    data['hidden_input_value'] = area_sutami_wlingi_kering
+    data['js'] = js_optimize_file
     data['data_url'] = url_for('main.optimize')
     return data
 
@@ -117,59 +162,53 @@ def getSengguruhOptPageData():
     data = {}
     data['title'] = 'Cascade Sengguruh Opt'
     data['inputs'] = [
-        { 'label': "Inflow Sengguruh", 'name': 'inflow_sengguruh', 'type': 'text', 'unit': 'm&sup3;/s' }
+        { 'label': "Inflow Min", 'name': 'inflow_min', 'type': 'text', 'unit': 'm&sup3;/s' },
+        { 'label': "Inflow Max", 'name': 'inflow_max', 'type': 'text', 'unit': 'm&sup3;/s' }
     ]
     data['columns'] = [
-        { 'label': 'Daya Output Sengguruh #1', 'id': 'beban_1', 'unit': 'MW' },
-        { 'label': 'Daya Output Sengguruh #2', 'id': 'beban_2', 'unit': 'MW' },
-        { 'label': 'Energi Output Sengguruh #1', 'id': 'energi_1', 'unit': 'MWh' },
-        { 'label': 'Energi Output Sengguruh #2', 'id': 'energi_2', 'unit': 'MWh' },
-        { 'label': 'Total Daya Output Sengguruh', 'id': 'total_beban', 'unit': 'MW' },
-        { 'label': 'Total Energi Output Sengguruh', 'id': 'total_energi', 'unit': 'MWh' }
+        { 'label': 'Beban Rata-Rata Mesin #1', 'id': 'beban_1_total', 'unit': 'MW' },
+        { 'label': 'Beban Rata-Rata Mesin #2', 'id': 'beban_2_total', 'unit': 'MW' },
+        { 'label': 'Total Energi Perjam Mesin #1', 'id': 'energi_1', 'unit': 'MWh' },
+        { 'label': 'Total Energi Perjam Mesin #2', 'id': 'energi_2', 'unit': 'MWh' },
+        { 'label': 'Rata-Rata Debit', 'id': 'q_mean', 'unit': 'm&sup3;/s' }
     ]
-    data['hidden_input_value'] = 'sengguruh'
-    data['js'] = 'optimize.js'
+    data['hidden_input_value'] = area_sengguruh
+    data['js'] = js_optimize_file
     data['data_url'] = url_for('main.optimize')
     return data
 
 def getTableColumnData(area):
     data = {}
 
-    if area == "sms1":
+    if area == area_sms_1:
         data['title'] = "SMS 1 Optimization Data" 
         data['column'] = [c['id'] for c in getSMSOpt1PageData()['columns']]
         data['col_to_disp'] = [c['name'] for c in getSMSOpt1PageData()['inputs']]
-        data['area'] = 'sms1'
-    elif area == "sms2":
+        data['area'] = area_sms_1
+    elif area == area_sms_2:
         data['title'] = "SMS 2 Optimization Data"
         data['column'] = [c['id'] for c in getSMSOpt2PageData()['columns']]
         data['col_to_disp'] = [c['name'] for c in getSMSOpt2PageData()['inputs']]
-        data['area'] = 'sms2'
-    elif area == "sutami-wlingi":
-        data['title'] = "Sutami Wlingi 1 Optimization Data"
+        data['area'] = area_sms_2
+    elif area == area_sutami_wlingi_basah:
+        data['title'] = "Sutami Wlingi Basah Optimization Data"
         data['column'] = [c['id'] for c in getSutamiWlingiOptPageData()['columns']]
         data['col_to_disp'] = [c['name'] for c in getSutamiWlingiOptPageData()['inputs']]
-        data['area'] = 'sutami-wlingi'
-    elif area == "sengguruh":
-        data['title'] = "Sengguruh 1 Optimization Data"
+        data['area'] = area_sutami_wlingi_basah
+    elif area == area_sutami_wlingi_kering:
+        data['title'] = "Sutami Wlingi Kering Optimization Data"
+        data['column'] = [c['id'] for c in getSutamiWlingiOptPageData()['columns']]
+        data['col_to_disp'] = [c['name'] for c in getSutamiWlingiOptPageData()['inputs']]
+        data['area'] = area_sutami_wlingi_kering
+    elif area == area_sengguruh:
+        data['title'] = "Sengguruh Optimization Data"
         data['column'] = [c['id'] for c in getSengguruhOptPageData()['columns']]
-        # data['col_to_disp'] = [c['name'] for c in getSengguruhOptPageData()['inputs']]
         data['col_to_disp'] = [c['name'] for c in getSengguruhOptPageData()['inputs']]
-        data['area'] = 'sengguruh'
+        data['area'] = area_sengguruh
     
     if data != {}:
         data['column'] = data['col_to_disp'] + list(set(data['column']) - set(data['col_to_disp']))
-        if area == "sengguruh":
+        if area == area_sengguruh:
             data['col_to_disp'] = data['column']
-        data['js'] = 'data.js'
-    return data
-
-def getTableDataPageData():
-    data = {}
-    data['column'] = ['inflow_selorejo', 'elevasi_awal', 'elevasi_target', 'elevasi_akhir', 'outflow_selorejo', 'mw_selorejo', 'mwh_selorejo', 
-    'limpas', 'inflow_outflow_mendalan', 'mw_mendalan_1', 'mw_mendalan_2', 'mw_mendalan_3', 'mw_mendalan_4', 'mw_mendalan', 'mwh_mendalan', 
-    'suplesi_siman', 'inflow_siman', 'mw_siman_1', 'mw_siman_2', 'mw_siman_3', 'mw_siman', 'mwh_siman']
-    data['col_to_disp'] = ['inflow_selorejo', 'elevasi_awal', 'elevasi_target', 'elevasi_akhir', 'outflow_selorejo','mw_selorejo', 'mwh_selorejo', 
-    'limpas']
-    data['js'] = 'data.js'
+        data['js'] = js_data_file
     return data

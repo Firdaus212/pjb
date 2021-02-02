@@ -4,6 +4,7 @@ from .models import *
 from . import db, eng
 import io, time, os, re
 from .helpers import *
+import matlab.engine
 
 main = Blueprint('main', __name__)
 base_app_path = os.path.abspath(os.path.dirname(__file__)).replace('\\', '/')
@@ -12,38 +13,54 @@ matlab_file_path_sengguruh = base_app_path + '/matlab_files/sengguruh'
 matlab_file_path_sutami = base_app_path + '/matlab_files/sutami'
 headers = {"Content-Type": "application/json"}
 
+# Remove key from dictionary
+def entries_to_remove(entries, the_dict):
+    for key in entries:
+        if key in the_dict:
+            del the_dict[key]
+    return the_dict
+
+# Generate data to insert to the database
 def generateInsertData(result, area):
-    if area == 'sms1':
+    if area == area_sms_1:
         return SMS1(**result)
-    elif area == 'sms2':
+    elif area == area_sms_2:
         return SMS2(**result)
-    elif area == 'sutami-wlingi':
+    elif area == area_sutami_wlingi_basah:
         return SutamiWlingi(**result)
-    elif area == 'sengguruh':
+    elif area == area_sengguruh:
         return Sengguruh(**result)
 
+# Check if data with certain input value already present on the database
 def checkDataExistInDatabase(input, area):
     found = None
-    if area == 'sms1':
+    if area == area_sms_1:
         found = SMS1.query.filter_by(**input).first()
-    elif area == 'sms2':
+    elif area == area_sms_2:
         found = SMS2.query.filter_by(**input).first()
-    elif area == 'sutami-wlingi':
+    elif area == area_sutami_wlingi_basah:
         found = SutamiWlingi.query.filter_by(**input).first()
-    elif area == 'sengguruh':
+    elif area == area_sengguruh:
         found = Sengguruh.query.filter_by(**input).first()
     if found != None:
         return True, found
     return False, found
 
+# Conver input to float data type
 def converToFloat(inp):
     try:
         for k in inp:
-            inp[k] = float(inp[k])
+            if k == 't1' or k == 't2' or k == 't3':
+                inp[k] = [float(v) for v in inp[k]]
+            else:    
+                inp[k] = float(inp[k])
     except Exception as e:
         return False, str(e)
     return True, inp
 
+# Perform cascade optimization calculation by executing matlab function script
+# using matlab engine for python.
+# See https://www.mathworks.com/help/matlab/matlab-engine-for-python.html for more details
 def performOptimization(resp_dict, post_data, area):
     start_time = time.time()
     conv_status, conv_res = converToFloat(post_data)
@@ -53,7 +70,10 @@ def performOptimization(resp_dict, post_data, area):
     
     result = {}
 
-    is_data_exist, data_found = checkDataExistInDatabase(conv_res, area)
+    is_data_exist = False
+
+    if area == area_sms_1 or area == area_sms_2:
+        is_data_exist, data_found = checkDataExistInDatabase(conv_res, area)
 
     if is_data_exist:
         data_found = data_found.__dict__
@@ -61,24 +81,27 @@ def performOptimization(resp_dict, post_data, area):
         result = data_found
     else:
         try:
-            if area == 'sms1':
+            if area == area_sms_1:
                 eng.addpath(matlab_file_path_selorejo)
-                result = eng.sms1(conv_res, nargout=1)
-            elif area == 'sms2':
+                result = eng.sms1(conv_res)
+            elif area == area_sms_2:
                 eng.addpath(matlab_file_path_selorejo)
-                result = eng.sms2(conv_res, nargout=1)
-            elif area == 'sutami-wlingi':
+                result = eng.sms2(conv_res)
+            elif area == area_sutami_wlingi_basah:
                 eng.addpath(matlab_file_path_sutami)
-                result = eng.opt(conv_res, nargout=1)
-            elif area == 'sengguruh':
+                result = eng.sutami_wlingi_basah(conv_res)
+            elif area == area_sutami_wlingi_kering:
+                eng.addpath(matlab_file_path_sutami)
+                result = eng.sutami_wlingi_kering(conv_res)
+            elif area == area_sengguruh:
                 eng.addpath(matlab_file_path_sengguruh)
-                result = eng.opt_sengguruh(conv_res, nargout=1)
+                result = eng.sengguruh(conv_res)
             # eng.quit()
         except Exception as e:
             resp_dict['msg'] = str(e)
             return resp_dict, 400
 
-        if result != {}:
+        if result != {} and ( area == area_sms_1 or area == area_sms_2 ):
             result.update(conv_res)
             insert_data = generateInsertData(result, area)
             try:
@@ -92,11 +115,14 @@ def performOptimization(resp_dict, post_data, area):
     resp_dict['data'] = result
     return resp_dict, 200
 
+# Index or Home page route
 @main.route('/')
 def index():
+    print(area_sutami_wlingi_basah)
     name = current_user.name if hasattr(current_user, 'name') else ""
     return render_template('index.html', name=name)
 
+# Profile page route
 @main.route('/profile')
 @login_required
 def profile():
@@ -107,6 +133,13 @@ def profile():
     }
     return render_template('profile.html', data={'user_info': user_info})
 
+# Page not found route
+@main.route('/not_found')
+# @login_required
+def not_found():
+    return render_template('404.html', data=data)
+
+# Optimization data page route
 @main.route('/data/<string:area>')
 @login_required
 def data(area):
@@ -115,11 +148,8 @@ def data(area):
         return redirect(url_for('main.not_found'))
     return render_template('data.html', data=data)
 
-@main.route('/not_found')
-# @login_required
-def not_found():
-    return render_template('404.html', data=data)
 
+# Get optimization data for ajax call
 @main.route('/table_data/<string:area>', methods=['POST'])
 @login_required
 def table_data(area):
@@ -128,16 +158,19 @@ def table_data(area):
     limit = int(request.form.get('length'))
     total = 0
 
-    if area == "sms1":
+    if area == area_sms_1:
         info = SMS1.query.order_by(SMS1.h0).offset(offset).limit(limit).all()
         total = SMS1.query.count()
-    elif area == "sms2":
+    elif area == area_sms_2:
         info = SMS2.query.order_by(SMS2.h0).offset(offset).limit(limit).all()
         total = SMS2.query.count()
-    elif area == "sutami-wlingi":
+    elif area == area_sutami_wlingi_basah:
         info = SutamiWlingi.query.order_by(SutamiWlingi.elevasi_awal).offset(offset).limit(limit).all()
         total = SutamiWlingi.query.count()
-    elif area == "sengguruh":
+    elif area == area_sutami_wlingi_kering:
+        info = SutamiWlingi.query.order_by(SutamiWlingi.elevasi_awal).offset(offset).limit(limit).all()
+        total = SutamiWlingi.query.count()
+    elif area == area_sengguruh:
         info = Sengguruh.query.order_by(Sengguruh.inflow_sengguruh).offset(offset).limit(limit).all()
         total = Sengguruh.query.count()
 
@@ -156,22 +189,26 @@ def table_data(area):
     }
     return make_response(jsonify(resp_info), 200, headers)
 
+# Optimization page route
 @main.route('/optimization/<string:area>', methods=['GET'])
 @login_required
 def optimization(area):
-    if area == 'sms1':
+    if area == area_sms_1:
         data = getSMSOpt1PageData()
-    elif area == 'sms2':
+    elif area == area_sms_2:
         data = getSMSOpt2PageData()
-    elif area == 'sutami-wlingi':
-        data = getSutamiWlingiOptPageData()
-    elif area == 'sengguruh':
+    elif area == area_sutami_wlingi_basah:
+        data = getSutamiWlingiWetOptPageData()
+    elif area == area_sutami_wlingi_kering:
+        data = getSutamiWlingiDryOptPageData()
+    elif area == area_sengguruh:
         data = getSengguruhOptPageData()
     else:
         return redirect(url_for('main.not_found'))
     data['name'] = current_user.name
     return render_template('optimization.html', data=data )
 
+# Route for ajax call to perfom optimization process based on input provided
 @main.route('/optimize', methods=['POST'])
 @login_required
 def optimize():
@@ -179,27 +216,34 @@ def optimize():
     status = 200
     area = request.form.get('area')
     post_data = request.form.to_dict()
-    del post_data['area']
+    if area == area_sutami_wlingi_basah or area == area_sutami_wlingi_kering:
+        post_data['t1'] = request.form.getlist('t1[]')
+        post_data['t2'] = request.form.getlist('t2[]')
+        post_data['t3'] = request.form.getlist('t3[]')
+        post_data = entries_to_remove(('area', 't1[]', 't2[]', 't3[]'), post_data)
+    else:
+        post_data = entries_to_remove(('area',), post_data)
 
     resp_dict = {
         'error': True,
         'data': {},
         'msg' : '',
-        'msgs' : matlab_file_path_sengguruh,
         'exec_time': -1
     }
-
-    if area == 'sms1':
+    if area == area_sms_1:
         resp_dict, status = performOptimization(resp_dict, post_data, area)
-    elif area == 'sms2':
+    elif area == area_sms_2:
         resp_dict, status = performOptimization(resp_dict, post_data, area)
-    elif area == 'sutami-wlingi':
+    elif area == area_sutami_wlingi_basah:
         resp_dict, status = performOptimization(resp_dict, post_data, area)
-    elif area == 'sengguruh':
+    elif area == area_sutami_wlingi_kering:
+        resp_dict, status = performOptimization(resp_dict, post_data, area)
+    elif area == area_sengguruh:
         resp_dict, status = performOptimization(resp_dict, post_data, area)
         
     return make_response(jsonify(resp_dict), status, headers)  
 
+# Matlab files page route
 @main.route('/matlab_files', methods=['GET'])
 @login_required
 def matlab_files():
@@ -210,6 +254,7 @@ def matlab_files():
     data['sengguruh'] = os.listdir(matlab_file_path_sengguruh)
     return render_template('matlab-data.html', data=data)
 
+# Route for downloading matlab file saved on the server
 @main.route('/download/<string:folder>/<string:filename>', methods=['GET'])
 @login_required
 def download(folder, filename):
@@ -227,19 +272,20 @@ def download(folder, filename):
     else:
         return make_response(jsonify({'status': 'error', 'msg': 'File not found'}), 400, headers)  
 
+# Route for ajax call for emptying optimization data table
 @main.route('/empty_table/<string:area>', methods=['GET'])
 def empty_table(area):
     record_deleted = -1
-    if area == 'sms1':
+    if area == area_sms_1:
         record_deleted = db.session.query(SMS1).delete()
         db.session.commit()
-    elif area == 'sms2':
+    elif area == area_sms_2:
         record_deleted = db.session.query(SMS2).delete()
         db.session.commit()
-    elif area == 'sutami-wlingi':
+    elif area == area_sutami_wlingi_basah:
         record_deleted = db.session.query(SutamiWlingi).delete()
         db.session.commit()
-    elif area == 'sengguruh':
+    elif area == area_sengguruh:
         record_deleted = db.session.query(Sengguruh).delete()
         db.session.commit()
     
