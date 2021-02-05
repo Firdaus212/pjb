@@ -10,7 +10,7 @@ $(document).ready( function () {
         serverSide: true,
         ordering: false,
         ajax: {
-            url: '/table_data/'+$("#table_id").attr('data-area'),
+            url: $("#table_id").attr('data-url'),
             type: 'POST'
         },
         columns: columns,
@@ -31,7 +31,7 @@ $(document).ready( function () {
         if(confirm("Are you sure want to delete all data?")) {
             $.ajax({
                 type: "GET",
-                url: "/empty_table/"+$("#table_id").attr('data-area'),
+                url: $("#table_id").attr('data-empty-url'),
                 dataType: "JSON",
                 beforeSend: function(){
                     disableEnableTrashButton(true);

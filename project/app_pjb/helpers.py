@@ -4,11 +4,15 @@ from flask import url_for
 # See https://www.freeformatter.com/html-entities.html to get more details 
 area_sms_1 = 'sms1'
 area_sms_2 = 'sms2'
-area_sutami_wlingi_basah = 'sutami_wlingi_basah'
-area_sutami_wlingi_kering = 'sutami_wlingi_kering'
+area_sutami_wlingi_basah = 'sutami-wlingi-basah'
+area_sutami_wlingi_kering = 'sutami-wlingi-kering'
 area_sengguruh = 'sengguruh'
+data_waduk_area_sms = 'sms'
+data_waduk_area_sutami = 'sutami-wlingi'
 js_optimize_file = 'optimize.js'
 js_data_file = 'data.js'
+js_data_waduk_file = 'data-waduk.js'
+headers = {"Content-Type": "application/json"}
 
 
 def getSMSOpt1PageData():
@@ -208,7 +212,27 @@ def getTableColumnData(area):
     
     if data != {}:
         data['column'] = data['col_to_disp'] + list(set(data['column']) - set(data['col_to_disp']))
+        data['url'] = url_for('opt_data.table_data', area=area)
+        data['empty_url'] = url_for('opt_data.empty_table', area=area)
         if area == area_sengguruh:
             data['col_to_disp'] = data['column']
         data['js'] = js_data_file
+    
+    return data
+
+def getDataWadukPageData(area):
+    data = {}
+    data['column'] = ['id', 'H', 'P', 'Q']
+    data['js'] = js_data_waduk_file
+    data['url'] = url_for('opt_data.get_data_waduk', area=area)
+    data['empty_url'] = url_for('opt_data.empty_table', area=area)
+    data['area'] = area
+
+    if area == data_waduk_area_sms:
+        data['title'] = "Data Waduk SMS"
+    elif area == data_waduk_area_sutami:
+        data['title'] = "Data Waduk Sutami-Wlingi"
+    else:
+        data = {}
+
     return data

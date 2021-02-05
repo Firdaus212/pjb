@@ -15,6 +15,8 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/bs4Toast.css') }}">
   <!-- Datatable -->
   <link rel="stylesheet" href="{{ url_for('static', filename='DataTables/datatables.min.css') }}">
+  <!-- Orb.js -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/orb.min.css') }}">
   <!-- App css -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 </head>
@@ -46,8 +48,8 @@
                       Cascade Sutami-Wlingi Opt
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownSutami">
-                      <a class="dropdown-item" href="{{ url_for('main.optimization', area='sutami_wlingi_basah') }}">Cascade Sutami-Wlingi Basah Opt</a>
-                      <a class="dropdown-item" href="{{ url_for('main.optimization', area='sutami_wlingi_kering') }}">Cascade Sutami-Wlingi Kering Opt</a>
+                      <a class="dropdown-item" href="{{ url_for('main.optimization', area='sutami-wlingi-basah') }}">Cascade Sutami-Wlingi Basah Opt</a>
+                      <a class="dropdown-item" href="{{ url_for('main.optimization', area='sutami-wlingi-kering') }}">Cascade Sutami-Wlingi Kering Opt</a>
                     </div>
                 </li>
                 <li class="nav-item">
@@ -58,8 +60,13 @@
                       Opt Data
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownOptData">
-                      <a class="dropdown-item" href="{{ url_for('main.data', area='sms1') }}">SMS 1</a>
-                      <a class="dropdown-item" href="{{ url_for('main.data', area='sms2') }}">SMS 2</a>
+                      <a class="dropdown-item" href="{{ url_for('opt_data.data', area='sms1') }}">SMS 1</a>
+                      <a class="dropdown-item" href="{{ url_for('opt_data.data', area='sms2') }}">SMS 2</a>
+                      <a class="dropdown-item" href="{{ url_for('opt_data.data_waduk', area='sms') }}">Data Waduk SMS</a>
+                      <a class="dropdown-item" href="{{ url_for('opt_data.data_waduk', area='sutami-wlingi') }}">Data Waduk Sutami Wlingi</a>
+                      <a class="dropdown-item" href="{{ url_for('opt_data.pivot_data_waduk', area='sms') }}">Pivot Data Waduk SMS</a>
+                      <a class="dropdown-item" href="{{ url_for('opt_data.pivot_data_waduk', area='sutami-wlingi') }}">Pivot Data Waduk Sutami Wlingi</a>
+                      <a class="dropdown-item" href="{{ url_for('opt_data.upload_data_waduk') }}">Upload Data Waduk</a>
                     </div>
                 </li>
                 <!-- <li class="nav-item">
@@ -120,12 +127,18 @@
     <script src="{{ url_for('static', filename='bootstrap/js/dist/tooltip.js') }}"></script>
     <!-- Popover -->
     <script src="{{ url_for('static', filename='bootstrap/js/dist/popover.js') }}"></script>
+    <!-- Popper -->
+    <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
     <!-- Bootstrap 4.4 -->
     <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
     <!-- Toast js -->
     <script src="{{ url_for('static', filename='js/bs4-toast.js') }}"></script>
     <!-- Datatabel -->
     <script src="{{ url_for('static', filename='DataTables/datatables.min.js') }}"></script>
+    <!-- React -->
+    <script src="{{ url_for('static', filename='js/react.js') }}"></script>
+    <!-- Orb.js -->
+    <script src="{{ url_for('static', filename='js/orb.min.js') }}"></script>
     <!-- App js -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     {% if data and data.js %}

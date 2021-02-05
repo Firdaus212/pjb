@@ -40,4 +40,8 @@ def create_app():
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
+     # blueprint for non-auth parts of app
+    from .opt_data import opt_data as opt_data_blueprint
+    app.register_blueprint(opt_data_blueprint, url_prefix='/opt-data')
+
     return app

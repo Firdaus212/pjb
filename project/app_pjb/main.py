@@ -5,13 +5,13 @@ from . import db, eng
 import io, time, os, re
 from .helpers import *
 import matlab.engine
+import pandas as pd
 
 main = Blueprint('main', __name__)
 base_app_path = os.path.abspath(os.path.dirname(__file__)).replace('\\', '/')
 matlab_file_path_selorejo = base_app_path + '/matlab_files/selorejo'
 matlab_file_path_sengguruh = base_app_path + '/matlab_files/sengguruh'
 matlab_file_path_sutami = base_app_path + '/matlab_files/sutami'
-headers = {"Content-Type": "application/json"}
 
 # Remove key from dictionary
 def entries_to_remove(entries, the_dict):
@@ -118,7 +118,6 @@ def performOptimization(resp_dict, post_data, area):
 # Index or Home page route
 @main.route('/')
 def index():
-    print(area_sutami_wlingi_basah)
     name = current_user.name if hasattr(current_user, 'name') else ""
     return render_template('index.html', name=name)
 
@@ -138,56 +137,6 @@ def profile():
 # @login_required
 def not_found():
     return render_template('404.html', data=data)
-
-# Optimization data page route
-@main.route('/data/<string:area>')
-@login_required
-def data(area):
-    data = getTableColumnData(area)
-    if data == {}:
-        return redirect(url_for('main.not_found'))
-    return render_template('data.html', data=data)
-
-
-# Get optimization data for ajax call
-@main.route('/table_data/<string:area>', methods=['POST'])
-@login_required
-def table_data(area):
-    draw = int(request.form.get('draw'))
-    offset = int(request.form.get('start'))
-    limit = int(request.form.get('length'))
-    total = 0
-
-    if area == area_sms_1:
-        info = SMS1.query.order_by(SMS1.h0).offset(offset).limit(limit).all()
-        total = SMS1.query.count()
-    elif area == area_sms_2:
-        info = SMS2.query.order_by(SMS2.h0).offset(offset).limit(limit).all()
-        total = SMS2.query.count()
-    elif area == area_sutami_wlingi_basah:
-        info = SutamiWlingi.query.order_by(SutamiWlingi.elevasi_awal).offset(offset).limit(limit).all()
-        total = SutamiWlingi.query.count()
-    elif area == area_sutami_wlingi_kering:
-        info = SutamiWlingi.query.order_by(SutamiWlingi.elevasi_awal).offset(offset).limit(limit).all()
-        total = SutamiWlingi.query.count()
-    elif area == area_sengguruh:
-        info = Sengguruh.query.order_by(Sengguruh.inflow_sengguruh).offset(offset).limit(limit).all()
-        total = Sengguruh.query.count()
-
-    data = []
-    for inf in info:
-        item = {}
-        for key in inf.__table__.columns.keys():
-            if key != 'id':
-                item[key] = getattr(inf, key)
-        data.append(item)
-    resp_info = {
-        "draw": draw,
-        "recordsTotal": total,
-        "recordsFiltered": total,
-        "data": data
-    }
-    return make_response(jsonify(resp_info), 200, headers)
 
 # Optimization page route
 @main.route('/optimization/<string:area>', methods=['GET'])
@@ -244,7 +193,7 @@ def optimize():
     return make_response(jsonify(resp_dict), status, headers)  
 
 # Matlab files page route
-@main.route('/matlab_files', methods=['GET'])
+@main.route('/matlab-files', methods=['GET'])
 @login_required
 def matlab_files():
     data = {}
@@ -268,25 +217,6 @@ def download(folder, filename):
         folder_name = matlab_file_path_sengguruh
 
     if folder_name != '' and os.path.exists(folder_name + '\\' +filename):
-        return send_file(folder_name + '\\' +filename, as_attachment=True)
+        return send_file(folder_name + '\\' +filename, as_attachment=True, cache_timeout=0)
     else:
         return make_response(jsonify({'status': 'error', 'msg': 'File not found'}), 400, headers)  
-
-# Route for ajax call for emptying optimization data table
-@main.route('/empty_table/<string:area>', methods=['GET'])
-def empty_table(area):
-    record_deleted = -1
-    if area == area_sms_1:
-        record_deleted = db.session.query(SMS1).delete()
-        db.session.commit()
-    elif area == area_sms_2:
-        record_deleted = db.session.query(SMS2).delete()
-        db.session.commit()
-    elif area == area_sutami_wlingi_basah:
-        record_deleted = db.session.query(SutamiWlingi).delete()
-        db.session.commit()
-    elif area == area_sengguruh:
-        record_deleted = db.session.query(Sengguruh).delete()
-        db.session.commit()
-    
-    return make_response(jsonify({'record_deleted': record_deleted}), 200, headers) 

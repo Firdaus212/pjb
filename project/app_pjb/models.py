@@ -96,3 +96,15 @@ class Sengguruh(db.Model):
     energi_2 = db.Column(db.Float)
     total_beban = db.Column(db.Float)
     total_energi = db.Column(db.Float)
+
+class DataWadukSms(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    h = db.Column(db.Float)
+    p = db.Column(db.Float)
+    q = db.Column(db.Float)
+
+class DataWadukSutami(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    h = db.Column(db.Float)
+    p = db.Column(db.Float)
+    q = db.Column(db.Float)
