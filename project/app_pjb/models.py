@@ -108,3 +108,6 @@ class DataWadukSutami(db.Model):
     h = db.Column(db.Float)
     p = db.Column(db.Float)
     q = db.Column(db.Float)
+
+db.Index('sms_h_p', DataWadukSms.h, DataWadukSms.p, unique=True)
+db.Index('sutami_h_p', DataWadukSutami.h, DataWadukSutami.p, unique=True)

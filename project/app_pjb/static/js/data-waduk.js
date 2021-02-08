@@ -144,8 +144,17 @@ $(document).ready( function () {
                 data: $('#formData').serialize(),
                 dataType: "JSON",
                 success: function (response) {
-                    console.log(response);
                     table.ajax.reload();
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                    bs4Toast.error('Error!', jqXHR.responseJSON.msg, {
+                        delay : 1500,
+                        bodyClasses : ['text-white', 'bg-danger'],
+                        icon : {
+                            type : 'fontawesome', 
+                            class : 'fa-exclamation-circle'
+                        }
+                    });
                 }
             });
         }

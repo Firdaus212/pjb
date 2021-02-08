@@ -10,5 +10,5 @@ def create_connection(db_file):
     return conn
 
 def batch_insert(conn, table, data):
-    conn.executemany("insert into "+table+"(h, p, q) values (?,?,?)", data)
+    conn.executemany("insert or ignore into "+table+"(h, p, q) values (?,?,?)", data)
     conn.commit()

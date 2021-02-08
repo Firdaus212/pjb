@@ -3,16 +3,32 @@
 {% block content %}
 <div class="row">
     <div class="offset-xs-0 offset-md-1 col-xs-11 col-md-5" style="margin-bottom: 10px;">
-        <form method="POST" action="/change_name">
+        <form method="POST" action="{{ url_for('auth.change_name') }}">
             <div class="card">
                 <div class="card-header">
                     Change Name
                 </div>
                 <div class="card-body">
+                    {% with messages = get_flashed_messages(with_categories=true, category_filter=['name_error', 'name_success']) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            {% if category == 'name_error' %}
+                                {% set alert_class = 'danger' %}
+                            {% elif category == 'name_success' %}
+                                {% set alert_class = 'success' %}
+                            {% endif %}
+                            {% if alert_class != None %}
+                                <div class="alert alert-{{ alert_class }}" role="alert">
+                                    {{ message }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {% endwith %}
                     <div class="form-group">
                         <label for="email">Fullname</label>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter your fullname" value="{{ data.user_info.name }}" required>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter your fullname" minlength="3" value="{{ data.user_info.name }}" required>
                             <div class="input-group-append">
                                 <span class="input-group-text"><i class="fas fa-id-card"></i></span>
                             </div>
@@ -26,39 +42,53 @@
         </form>
     </div>
     <div class="offset-xs-1 offset-md-0 col-xs-11 col-md-5">
-        <form action="POST" action="/change_password">
+        <form method="POST" action="{{ url_for('auth.change_password') }}">
             <div class="card">
-                <div class="card-header">
-                    Change Password
-                </div>
+                <div class="card-header">Change Password</div>
                 <div class="card-body">
-                        <div class="form-group">
-                            <label for="email">Old Password</label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Old Password" required>
-                                <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                    {% with messages = get_flashed_messages(with_categories=true, category_filter=['password_error', 'password_success']) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            {% if category == 'password_error' %}
+                                {% set alert_class_pass = 'danger' %}
+                            {% elif category == 'password_success' %}
+                                {% set alert_class_pass = 'success' %}
+                            {% endif %}
+                            {% if alert_class_pass != None %}
+                                <div class="alert alert-{{ alert_class_pass }}" role="alert">
+                                    {{ message }}
                                 </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+                    <div class="form-group">
+                        <label for="old_password">Old Password</label>
+                        <div class="input-group mb-3">
+                            <input type="password" class="form-control" id="old_password" name="old_password" placeholder="Enter Old Password" required>
+                            <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="email">New Password</label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter New Password" required>
-                                <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-key"></i></span>
-                                </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="new_password">New Password</label>
+                        <div class="input-group mb-3">
+                            <input type="password" class="form-control" id="new_password" name="new_password" placeholder="Enter New Password" required>
+                            <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="email">Confirm Password</label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Confirm New Password" required>
-                                <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-key"></i></span>
-                                </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm Password</label>
+                        <div class="input-group mb-3">
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm New Password" required>
+                            <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
                             </div>
                         </div>
+                    </div>
                 </div>
                 <div class="card-footer">
                     <button type="submit" class="btn btn-primary float-right">Submit</button>

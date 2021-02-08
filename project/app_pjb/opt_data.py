@@ -29,7 +29,7 @@ def allowed_file(filename):
 @opt_data.route('/data/<string:area>')
 @login_required
 def data(area):
-    data = getTableColumnData(area)
+    data = get_table_column_data(area)
     if data == {}:
         return redirect(url_for('main.not_found'))
     return render_template('data.html', data=data)
@@ -103,7 +103,7 @@ def empty_table(area):
 @opt_data.route('/data_waduk/<string:area>', methods=['GET'])
 @login_required
 def data_waduk(area):
-    data = getDataWadukPageData(area)
+    data = get_data_waduk_page_data(area)
     if data == {}:
         return redirect(url_for('main.not_found'))
     return render_template('data-waduk.html', data=data)
@@ -140,7 +140,12 @@ def do_upload():
         flash('File not alllowed or file is empty', 'error')
         return redirect(url_for('opt_data.upload_data_waduk'))
 
-    excel = pd.read_excel(file_data, engine='openpyxl')
+    try:
+        excel = pd.read_excel(file_data, engine='openpyxl', usecols=['H', 'P', 'Q'])
+    except Exception as e:
+        flash(str(e), 'error')
+        return redirect(url_for('opt_data.upload_data_waduk'))
+
     if 'H' not in excel or 'P' not in excel or 'Q' not in excel:
         flash('Column H, P, or Q not found', 'error')
         return redirect(url_for('opt_data.upload_data_waduk'))
@@ -151,7 +156,8 @@ def do_upload():
 
     dta = []
     for i in range(len(H)):
-        dta.append(list([H[i], P[i], round(Q[i], 2)]))
+        if not pd.isna(H[i]) and not pd.isna(P[i]) and not pd.isna(Q[i]):
+            dta.append(list([H[i], P[i], round(Q[i], 2)]))
     conn = create_connection(db_path)
     batch_insert(conn, db_table, dta)
     conn.close()
@@ -201,7 +207,7 @@ def pivot_data_waduk(area):
         data['title'] = 'Pivot Data Waduk SMS'
         data['source_url'] = url_for('opt_data.get_pivot_data_waduk', area=data_waduk_area_sms)
     elif area == data_waduk_area_sutami:
-        data['title'] = 'Pivot Data Waduk SMS'
+        data['title'] = 'Pivot Data Waduk Sutami Wlingi'
         data['source_url'] = url_for('opt_data.get_pivot_data_waduk', area=data_waduk_area_sutami)
     else:
         data = {}
@@ -234,10 +240,10 @@ def export_to_excel(area):
         table = 'data_waduk_sutami'
     conn = create_connection(db_path)
     cur = conn.cursor()
-    cur.execute("SELECT h,p,q FROM "+table)
+    cur.execute("SELECT h,q,p FROM "+table)
     rows = list(cur.fetchall())
     conn.close()
-    df1 = pd.DataFrame(rows, columns=['H', 'P', 'Q'])
+    df1 = pd.DataFrame(rows, columns=['H', 'Q', 'P'])
     os.remove(base_app_path+"/temps/data_waduk.xlsx")
     df1.to_excel(base_app_path+"/temps/data_waduk.xlsx", index=False, sheet_name='abc')
     return send_file(base_app_path+"/temps/data_waduk.xlsx", as_attachment=True, cache_timeout=0)
@@ -255,10 +261,10 @@ def update_excel_file(area):
     if table != '':
         conn = create_connection(db_path)
         cur = conn.cursor()
-        cur.execute("SELECT h,p,q FROM "+table)
+        cur.execute("SELECT h,q,p FROM "+table)
         rows = list(cur.fetchall())
         conn.close()
-        df1 = pd.DataFrame(rows, columns=['H', 'P', 'Q'])
+        df1 = pd.DataFrame(rows, columns=['H', 'Q', 'P'])
         df1.to_excel(file_path, index=False, sheet_name='abc')
     return make_response(jsonify({'data': 'success'}), 200, headers)
 
@@ -288,11 +294,14 @@ def edit_data_waduk(area, entity_id):
     elif area == data_waduk_area_sutami:
         edited_data = DataWadukSutami.query.filter_by(id=entity_id).first()
     if edited_data != None:
-        for key in post_data:
-            if key != 'entity_id':
-                setattr(edited_data, key, post_data[key])
-        db.session.commit()
-    return make_response(jsonify({'data': 'success'}), 200, headers)
+        try:
+            for key in post_data:
+                if key != 'entity_id':
+                    setattr(edited_data, key, post_data[key])
+            db.session.commit()
+        except Exception as e:
+            return make_response(jsonify({'msg': str(e)}), 400, headers)
+    return make_response(jsonify({'msg': 'success'}), 200, headers)
 
 @opt_data.route('/delete-data-waduk/<string:area>/<int:entity_id>', methods=['DELETE'])
 def delete_data_waduk(area, entity_id):

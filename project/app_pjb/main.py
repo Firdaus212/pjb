@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, make_response, jsonify, request, send_file, redirect, url_for
+from flask import Blueprint, render_template, make_response, jsonify, request, send_file, redirect, url_for, flash
 from flask_login import login_required, current_user
 from .models import *
 from . import db, eng
@@ -21,7 +21,7 @@ def entries_to_remove(entries, the_dict):
     return the_dict
 
 # Generate data to insert to the database
-def generateInsertData(result, area):
+def generate_insert_data(result, area):
     if area == area_sms_1:
         return SMS1(**result)
     elif area == area_sms_2:
@@ -32,7 +32,7 @@ def generateInsertData(result, area):
         return Sengguruh(**result)
 
 # Check if data with certain input value already present on the database
-def checkDataExistInDatabase(input, area):
+def check_data_exist_in_database(input, area):
     found = None
     if area == area_sms_1:
         found = SMS1.query.filter_by(**input).first()
@@ -47,7 +47,7 @@ def checkDataExistInDatabase(input, area):
     return False, found
 
 # Conver input to float data type
-def converToFloat(inp):
+def conver_to_float(inp):
     try:
         for k in inp:
             if k == 't1' or k == 't2' or k == 't3':
@@ -61,9 +61,9 @@ def converToFloat(inp):
 # Perform cascade optimization calculation by executing matlab function script
 # using matlab engine for python.
 # See https://www.mathworks.com/help/matlab/matlab-engine-for-python.html for more details
-def performOptimization(resp_dict, post_data, area):
+def perform_optimization(resp_dict, post_data, area):
     start_time = time.time()
-    conv_status, conv_res = converToFloat(post_data)
+    conv_status, conv_res = conver_to_float(post_data)
     if conv_status == False:
         resp_dict['msg'] = 'Invalid Input'
         return resp_dict, 400
@@ -73,7 +73,7 @@ def performOptimization(resp_dict, post_data, area):
     is_data_exist = False
 
     if area == area_sms_1 or area == area_sms_2:
-        is_data_exist, data_found = checkDataExistInDatabase(conv_res, area)
+        is_data_exist, data_found = check_data_exist_in_database(conv_res, area)
 
     if is_data_exist:
         data_found = data_found.__dict__
@@ -103,7 +103,7 @@ def performOptimization(resp_dict, post_data, area):
 
         if result != {} and ( area == area_sms_1 or area == area_sms_2 ):
             result.update(conv_res)
-            insert_data = generateInsertData(result, area)
+            insert_data = generate_insert_data(result, area)
             try:
                 db.session.add(insert_data)
                 db.session.commit()
@@ -121,16 +121,7 @@ def index():
     name = current_user.name if hasattr(current_user, 'name') else ""
     return render_template('index.html', name=name)
 
-# Profile page route
-@main.route('/profile')
-@login_required
-def profile():
-    user_info = {
-        "id": current_user.id,
-        "email": current_user.email,
-        "name": current_user.name,
-    }
-    return render_template('profile.html', data={'user_info': user_info})
+
 
 # Page not found route
 @main.route('/not_found')
@@ -143,15 +134,15 @@ def not_found():
 @login_required
 def optimization(area):
     if area == area_sms_1:
-        data = getSMSOpt1PageData()
+        data = get_sms_opt_1_page_data()
     elif area == area_sms_2:
-        data = getSMSOpt2PageData()
+        data = get_sms_opt_2_page_data()
     elif area == area_sutami_wlingi_basah:
-        data = getSutamiWlingiWetOptPageData()
+        data = get_sutami_wlingi_wet_opt_page_data()
     elif area == area_sutami_wlingi_kering:
-        data = getSutamiWlingiDryOptPageData()
+        data = get_sutami_wlingi_dry_opt_page_data()
     elif area == area_sengguruh:
-        data = getSengguruhOptPageData()
+        data = get_sengguruh_opt_page_data()
     else:
         return redirect(url_for('main.not_found'))
     data['name'] = current_user.name
@@ -180,15 +171,15 @@ def optimize():
         'exec_time': -1
     }
     if area == area_sms_1:
-        resp_dict, status = performOptimization(resp_dict, post_data, area)
+        resp_dict, status = perform_optimization(resp_dict, post_data, area)
     elif area == area_sms_2:
-        resp_dict, status = performOptimization(resp_dict, post_data, area)
+        resp_dict, status = perform_optimization(resp_dict, post_data, area)
     elif area == area_sutami_wlingi_basah:
-        resp_dict, status = performOptimization(resp_dict, post_data, area)
+        resp_dict, status = perform_optimization(resp_dict, post_data, area)
     elif area == area_sutami_wlingi_kering:
-        resp_dict, status = performOptimization(resp_dict, post_data, area)
+        resp_dict, status = perform_optimization(resp_dict, post_data, area)
     elif area == area_sengguruh:
-        resp_dict, status = performOptimization(resp_dict, post_data, area)
+        resp_dict, status = perform_optimization(resp_dict, post_data, area)
         
     return make_response(jsonify(resp_dict), status, headers)  
 

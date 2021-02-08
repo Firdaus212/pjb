@@ -8,6 +8,13 @@ auth = Blueprint('auth', __name__)
 
 headers = {"Content-Type": "application/json"}
 
+def validate_password_input(req_form):
+    fields = ['old_password', 'new_password', 'confirm_password']
+    for field in fields:
+        if field not in req_form:
+            return False
+    return True
+
 @auth.route('/login')
 def login():
     if current_user.is_authenticated:
@@ -58,6 +65,52 @@ def signup_post():
     # code to validate and add user to database goes here
     return redirect(url_for('auth.login'))
 
+# Profile page route
+@auth.route('/profile', methods=['GET'])
+@login_required
+def profile():
+    user_info = {
+        "id": current_user.id,
+        "email": current_user.email,
+        "name": current_user.name,
+    }
+    return render_template('profile.html', data={'user_info': user_info})
+
+# Change name route
+@auth.route('/change-name', methods=['POST'])
+@login_required
+def change_name():
+    if 'name' in request.form and request.form.get('name') != '':
+        user = User.query.filter_by(id=current_user.id).first()
+        user.name = request.form.get('name')
+        db.session.commit()
+        flash('Name changed successfully', 'name_success')
+        return redirect(url_for('auth.profile'))
+    flash('No name provided', 'name_error')
+    return redirect(url_for('auth.profile'))
+
+# Change password route
+@auth.route('/change-password', methods=['POST'])
+@login_required
+def change_password():
+    if not validate_password_input(request.form):
+        flash('No password provided', 'password_error')
+        return redirect(url_for('auth.profile'))
+
+    user = User.query.filter_by(id=current_user.id).first()
+    if not check_password_hash(user.password, request.form.get('old_password')):
+        flash('Wrong old password', 'password_error')
+        return redirect(url_for('auth.profile'))
+
+    if request.form.get('new_password') != request.form.get('confirm_password'):
+        flash("Confirm password doesn't match new password", 'password_error')
+        return redirect(url_for('auth.profile'))
+
+    user.password = generate_password_hash(request.form.get('new_password'), method='sha256')
+    db.session.commit()
+    flash('Password changed successfully', 'password_success')
+    return redirect(url_for('auth.profile'))
+            
 @auth.route('/logout')
 @login_required
 def logout():

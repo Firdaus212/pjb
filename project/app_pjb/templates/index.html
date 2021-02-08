@@ -4,7 +4,7 @@
 {% if current_user.is_authenticated %}
 <div class="row welcome"> 
   <div class="offset-1 col-11">
-    <h6 class="card-text text-white ">Welcome, <span>{{ name }}<span></h6>
+    <h6 class="card-text text-white ">Welcome, <a href="{{ url_for('auth.profile') }}">{{ name }}</a></h6>
   </div>
 </div>
 {% endif %}

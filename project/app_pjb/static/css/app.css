@@ -45,7 +45,7 @@
 .welcome{
     margin-bottom: 15px;
 }
-.welcome span{
+.welcome a{
     color: yellow;
 }
 .col-title{

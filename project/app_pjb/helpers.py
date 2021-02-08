@@ -15,7 +15,7 @@ js_data_waduk_file = 'data-waduk.js'
 headers = {"Content-Type": "application/json"}
 
 
-def getSMSOpt1PageData():
+def get_sms_opt_1_page_data():
     data = {}
     data['title'] = 'Cascade SMS Opt 1'
     data['inputs'] = [
@@ -52,7 +52,7 @@ def getSMSOpt1PageData():
     data['data_url'] = url_for('main.optimize')
     return data
 
-def getSMSOpt2PageData():
+def get_sms_opt_2_page_data():
     data = {}
     data['title'] = 'Cascade SMS Opt 2'
     data['inputs'] = [
@@ -89,7 +89,7 @@ def getSMSOpt2PageData():
     data['data_url'] = url_for('main.optimize')
     return data
 
-def getSutamiWlingiWetOptPageData():
+def get_sutami_wlingi_wet_opt_page_data():
     data = {}
     data['title'] = 'Cascade Sutami-Wlingi Basah Opt'
     data['inputs'] = [
@@ -123,7 +123,7 @@ def getSutamiWlingiWetOptPageData():
     data['data_url'] = url_for('main.optimize')
     return data
 
-def getSutamiWlingiDryOptPageData():
+def get_sutami_wlingi_dry_opt_page_data():
     data = {}
     data['title'] = 'Cascade Sutami-Wlingi Kering Opt'
     data['inputs'] = [
@@ -162,7 +162,7 @@ def getSutamiWlingiDryOptPageData():
     data['data_url'] = url_for('main.optimize')
     return data
 
-def getSengguruhOptPageData():
+def get_sengguruh_opt_page_data():
     data = {}
     data['title'] = 'Cascade Sengguruh Opt'
     data['inputs'] = [
@@ -181,18 +181,18 @@ def getSengguruhOptPageData():
     data['data_url'] = url_for('main.optimize')
     return data
 
-def getTableColumnData(area):
+def get_table_column_data(area):
     data = {}
 
     if area == area_sms_1:
         data['title'] = "SMS 1 Optimization Data" 
-        data['column'] = [c['id'] for c in getSMSOpt1PageData()['columns']]
-        data['col_to_disp'] = [c['name'] for c in getSMSOpt1PageData()['inputs']]
+        data['column'] = [c['id'] for c in get_sms_opt_1_page_data()['columns']]
+        data['col_to_disp'] = [c['name'] for c in get_sms_opt_1_page_data()['inputs']]
         data['area'] = area_sms_1
     elif area == area_sms_2:
         data['title'] = "SMS 2 Optimization Data"
-        data['column'] = [c['id'] for c in getSMSOpt2PageData()['columns']]
-        data['col_to_disp'] = [c['name'] for c in getSMSOpt2PageData()['inputs']]
+        data['column'] = [c['id'] for c in get_sms_opt_2_page_data()['columns']]
+        data['col_to_disp'] = [c['name'] for c in get_sms_opt_2_page_data()['inputs']]
         data['area'] = area_sms_2
     elif area == area_sutami_wlingi_basah:
         data['title'] = "Sutami Wlingi Basah Optimization Data"
@@ -206,8 +206,8 @@ def getTableColumnData(area):
         data['area'] = area_sutami_wlingi_kering
     elif area == area_sengguruh:
         data['title'] = "Sengguruh Optimization Data"
-        data['column'] = [c['id'] for c in getSengguruhOptPageData()['columns']]
-        data['col_to_disp'] = [c['name'] for c in getSengguruhOptPageData()['inputs']]
+        data['column'] = [c['id'] for c in get_sengguruh_opt_page_data()['columns']]
+        data['col_to_disp'] = [c['name'] for c in get_sengguruh_opt_page_data()['inputs']]
         data['area'] = area_sengguruh
     
     if data != {}:
@@ -220,7 +220,7 @@ def getTableColumnData(area):
     
     return data
 
-def getDataWadukPageData(area):
+def get_data_waduk_page_data(area):
     data = {}
     data['column'] = ['id', 'H', 'P', 'Q']
     data['js'] = js_data_waduk_file
