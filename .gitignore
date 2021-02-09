@@ -127,3 +127,5 @@ dmypy.json
 # Env
 /pjbenv
 .vscode
+
+project/app_pjb/db.sqlite
