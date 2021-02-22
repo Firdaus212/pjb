@@ -133,6 +133,7 @@ def not_found():
 @main.route('/optimization/<string:area>', methods=['GET'])
 @login_required
 def optimization(area):
+    data = {}
     if area == area_sms_1:
         data = get_sms_opt_1_page_data()
     elif area == area_sms_2:
@@ -143,10 +144,14 @@ def optimization(area):
         data = get_sutami_wlingi_dry_opt_page_data()
     elif area == area_sengguruh:
         data = get_sengguruh_opt_page_data()
-    else:
-        return redirect(url_for('main.not_found'))
     data['name'] = current_user.name
-    return render_template('optimization.html', data=data )
+    if area == area_sms_1 or area == area_sms_2:
+        return render_template('opt-sms.html', data=data )    
+    elif area == area_sutami_wlingi_basah or area == area_sutami_wlingi_kering:
+        return render_template('opt-sutami.html', data=data )    
+    elif area == area_sengguruh:
+        return render_template('opt-sengguruh.html', data=data )  
+    return redirect(url_for('main.not_found'))
 
 # Route for ajax call to perfom optimization process based on input provided
 @main.route('/optimize', methods=['POST'])
@@ -189,6 +194,7 @@ def optimize():
 def matlab_files():
     data = {}
     data['title'] = "Matlab Files for Optimization"
+    data['js'] = "matlab-data.js"
     data['selorejo'] = os.listdir(matlab_file_path_selorejo)
     data['sutami-wlingi'] = os.listdir(matlab_file_path_sutami)
     data['sengguruh'] = os.listdir(matlab_file_path_sengguruh)

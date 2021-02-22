@@ -8,11 +8,11 @@ import matlab.engine
 import pandas as pd
 from werkzeug.utils import secure_filename
 from .db_helper import create_connection, batch_insert
+from werkzeug.utils import secure_filename
 
 opt_data = Blueprint('opt_data', __name__)
 
-UPLOAD_FOLDER = '/path/to/the/uploads'
-ALLOWED_EXTENSIONS = {'xls', 'xlsx'}
+ALLOWED_EXTENSIONS = {'xls', 'xlsx', 'm'}
 base_app_path = os.path.abspath(os.path.dirname(__file__)).replace('\\', '/')
 db_path = base_app_path + '/db.sqlite'
 db_sms = 'data_waduk_sms'
@@ -312,3 +312,40 @@ def delete_data_waduk(area, entity_id):
         DataWadukSutami.query.filter_by(id = entity_id).delete()
         db.session.commit()
     return make_response(jsonify({'data': 'success'}), 200, headers)
+
+@opt_data.route('/update-matlab-file', methods=['POST'])
+def update_matlab_file():
+    if 'area' not in request.form or 'filename' not in request.form:
+        flash('Inputs are not valid', 'error')
+        return redirect(url_for('main.matlab_files'))
+
+    area = request.form.get('area')
+    filename = request.form.get('filename')
+
+    if area == 'selorejo':
+        save_path = matlab_file_path_selorejo
+    elif area == 'sutami-wlingi':
+        save_path = matlab_file_path_sutami
+    elif area == 'sengguruh':
+        save_path = matlab_file_path_sengguruh
+    else:
+        flash('Area does not exist', 'error')
+        return redirect(url_for('main.matlab_files'))
+
+    if 'file_data' not in request.files:
+        flash('File input does not exist', 'error')
+        return redirect(url_for('main.matlab_files'))
+        
+    file_data = request.files['file_data']
+    if file_data.filename == '':
+        flash('No selected file', 'error')
+        return redirect(url_for('main.matlab_files'))
+
+    if not file_data or not allowed_file(file_data.filename):
+        flash('File not alllowed or file is empty', 'error')
+        return redirect(url_for('main.matlab_files'))
+
+    filename = secure_filename(filename)
+    file_data.save(save_path+'/'+filename)
+    flash('File updated', 'success')
+    return redirect(url_for('main.matlab_files'))

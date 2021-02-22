@@ -50,6 +50,7 @@ def get_sms_opt_1_page_data():
     data['hidden_input_value'] = area_sms_1
     data['js'] = js_optimize_file
     data['data_url'] = url_for('main.optimize')
+    data['images'] = 'sms1.png'
     return data
 
 def get_sms_opt_2_page_data():
@@ -87,6 +88,7 @@ def get_sms_opt_2_page_data():
     data['hidden_input_value'] = area_sms_2
     data['js'] = js_optimize_file
     data['data_url'] = url_for('main.optimize')
+    data['images'] = 'sms2.png'
     return data
 
 def get_sutami_wlingi_wet_opt_page_data():
@@ -121,6 +123,7 @@ def get_sutami_wlingi_wet_opt_page_data():
     data['hidden_input_value'] = area_sutami_wlingi_basah
     data['js'] = js_optimize_file
     data['data_url'] = url_for('main.optimize')
+    data['images'] = 'sw1.png'
     return data
 
 def get_sutami_wlingi_dry_opt_page_data():
@@ -160,6 +163,7 @@ def get_sutami_wlingi_dry_opt_page_data():
     data['hidden_input_value'] = area_sutami_wlingi_kering
     data['js'] = js_optimize_file
     data['data_url'] = url_for('main.optimize')
+    data['images'] = 'sw2.png'
     return data
 
 def get_sengguruh_opt_page_data():
@@ -179,6 +183,7 @@ def get_sengguruh_opt_page_data():
     data['hidden_input_value'] = area_sengguruh
     data['js'] = js_optimize_file
     data['data_url'] = url_for('main.optimize')
+    data['images'] = 'sengguruh.png'
     return data
 
 def get_table_column_data(area):

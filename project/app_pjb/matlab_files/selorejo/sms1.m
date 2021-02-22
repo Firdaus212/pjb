@@ -20,9 +20,9 @@ function result = sms1(input)
     s1=[1 12 13 123];
     s2=[2 12 23 123];
     s3=[3 13 23 123];
-    M = xlsread('performanceMS','mendalan','A1:K5');
-    PM1 = M(:,1);
-    QM1 = M(:,2);
+    M = xlsread('performanceMS','mendalan','A1:K6');
+    PM1 = M(1:5,1);
+    QM1 = M(1:5,2);
     PM2 = M(:,4);
     QM2 = M(:,5);
     PM3 = M(:,7);
@@ -30,7 +30,8 @@ function result = sms1(input)
     PM4 = M(:,10);
     QM4 = M(:,11);
 
-    S = xlsread('performanceMS','siman','A1:H5');
+
+    S = xlsread('performanceMS','siman','A1:H18');
     PS1 = S(:,1);
     QS1 = S(:,2);
     PS2 = S(:,4);
@@ -46,9 +47,9 @@ function result = sms1(input)
     Pm2=fit(QM2,PM2,'poly4');
     Pm3=fit(QM3,PM3,'poly4');
     Pm4=fit(QM4,PM4,'poly4');
-    Ps1=fit(QS1,PS1,'poly4');
-    Ps2=fit(QS2,PS2,'poly4');
-    Ps3=fit(QS3,PS3,'poly4');
+    Ps1=fit(QS1,PS1,'poly5');
+    Ps2=fit(QS2,PS2,'poly5');
+    Ps3=fit(QS3,PS3,'poly5');
     if Qout > 9.25
         limpas = Qout-9.25;
     else limpas = 0;
@@ -78,24 +79,36 @@ function result = sms1(input)
 
     if ismember(Turbin_m,m1)
         Pm_1=Pm1(q_m_stok);
+        if or(Pm_1>5.5 ,Pm_1<0)
+            Pm_1=5.5;
+        end
     else
         Pm_1=0;
     end
 
     if ismember(Turbin_m,m2)
         Pm_2=Pm2(q_m_stok);
+        if or(Pm_2>5.5 ,Pm_2<0)
+            Pm_2=5.5;
+        end
     else
         Pm_2=0;
     end
 
     if ismember(Turbin_m,m3)
         Pm_3=Pm3(q_m_stok);
+        if or(Pm_3>5.5 ,Pm_3<0)
+            Pm_3=5.5;
+        end
     else
         Pm_3=0;
     end
 
     if ismember(Turbin_m,m4)
         Pm_4=Pm4(q_m_stok);
+        if or(Pm_4>5.5 ,Pm_4<0)
+            Pm_4=5.5;
+        end
     else
         Pm_4=0;
     end
@@ -119,18 +132,27 @@ function result = sms1(input)
 
     if ismember(Turbin_s,s1)
         Ps_1=Ps1(q_s_stok);
+        if or(Ps_1>3.6 ,Ps_1<0)
+            Ps_1=3.6;
+        end
     else
         Ps_1=0;
     end
 
     if ismember(Turbin_s,s2)
         Ps_2=Ps2(q_s_stok);
+        if or(Ps_2>3.6 ,Ps_2<0)
+            Ps_2=3.6;
+        end
     else
         Ps_2=0;
     end
 
     if ismember(Turbin_s,s3)
-        Ps_3=Ps2(q_s_stok);
+        Ps_3=Ps3(q_s_stok);
+        if or(Ps_3>3.6 ,Ps_3<0)
+            Ps_3=3.6;
+        end
     else
         Ps_3=0;
     end

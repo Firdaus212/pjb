@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-6" style="margin-bottom: 15px;">
                 {% for key in data %}
-                    {% if key != 'title' %}
+                    {% if key != 'title' and key != 'js' %}
                         <ul class="list-group list-file">
                             <li class="list-group-item d-flex justify-content-between align-items-center active">
                             {{ key.replace('-', ' ').title()  }}
@@ -19,7 +19,7 @@
                                     {{ item }}
                                     <span>
                                         <a href="{{ url_for('main.download', folder=key, filename=item) }}"><i class="fa fa-download"></i></a></i>
-                                        <a href="javascript:void(0);"><i class="fa fa-upload"></i></a></i>
+                                        <a href="javascript:void(0);" class="upload-ref" data-area="{{ key }}" data-name="{{ item }}"><i class="fa fa-upload"></i></a></i>
                                     </span>
                                 </li>
                             {% endfor %}
@@ -28,7 +28,47 @@
                 {% endfor %}
             </div>
             <div class="col-sm-12 col-md-12 col-lg-6 border-left">
-               
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        {% if category == 'error' %}
+                            {% set alert_class_pass = 'danger' %}
+                        {% elif category == 'success' %}
+                            {% set alert_class_pass = 'success' %}
+                        {% endif %}
+                        {% if alert_class_pass != None %}
+                            <div class="alert alert-{{ alert_class_pass }}" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% endwith %}
+               <div id="upload-card" class="card" style="display: none;">
+                    <div class="card-header"></div>
+                    <div class="card-body">
+                        <form id="upload-form" method="POST" action="{{ url_for('opt_data.update_matlab_file') }}" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="file-data">Choose a File</label>
+                                <input type="file" class="form-control-file" id="file-data" name="file_data">
+                            </div>
+                            <input type="hidden" name="area">
+                            <input type="hidden" name="filename">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Upload</button>
+                                <button id="cancelBtn" type="button" class="btn btn-danger">Cancel</button>
+                            </div>
+                        </form>
+                        <div class="alert alert-info" role="alert">
+                            <h4 class="alert-heading">Note!</h4>
+                            <hr>
+                            <ul>
+                                <li>Make sure to change the <b>matlab script</b> to <b>matlab function</b>.</li>
+                                <li><b>Download</b> the file first to take look on how the matlab function constructed.</li>
+                            </ul>
+                        </div>
+                    </div>
+               </div>
             </div>
         </div>
     </div>

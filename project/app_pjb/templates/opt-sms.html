@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card border-warning">
+    <div class="card-header text-white bg-warning">
+      {{ data.title }}
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <img src="{{ url_for('static', filename='images/'+data.images) }}" class="img-fluid float-center area-img sms-img" alt="SMS Diagram">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <div class="card border-info">
+                    <div class="card-body">
+                        <form id="inputForm">
+                            {% for input in data.inputs %}
+                            <div class="form-group">
+                                <!-- <label for="{{ input.name }}">{{ input.label }}</label> -->
+                                <div class="input-group input-group-sm mb-3">
+                                    {% if input.type == 'number' %}
+                                        <input type="number" min="{{ input.min }}" max="{{ input.max }}" step="{{ input.step }}" class="form-control text-right" id="{{ input.name }}" name="{{ input.name }}" placeholder="{{ input.label }}">
+                                    {% else %}
+                                        <input type="{{ input.type }}" class="form-control text-right" id="{{ input.name }}" name="{{ input.name }}" placeholder="{{ input.label }}">
+                                    {% endif %}
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">{{ input.unit | safe }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {% if data.hidden_input_value != None %}
+                            <input type="hidden" id="area" name="area" value="{{ data.hidden_input_value }}">
+                            {% endif %}
+                            <div class="form-group">
+                                <button type="button" id="calcBtn" class="btn btn-primary btn-block" data-url="{{ data.data_url }}">
+                                    <i class="fas fa-calculator"></i> Calculate
+                                </button>
+                            </div>
+                        </form>
+                        <div id="execInfo" class="alert alert-info" role="alert"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <table class="table table-striped table-sm result-table" style="font-size: 11px;">
+                    <thead class="thead-dark">
+                        <tr>
+                          <th scope="col">Selorejo</th>
+                          <th scope="col" class="text-right">Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for column in data.columns %}
+                        <tr>
+                            {% if 'selorejo' in column.label.lower() %}
+                            <th scope="row">{{ column.label }}</th>
+                            <td id="{{ column.id }}" class="text-right"><span class="value">0.0</span> <span>{{ column.unit | safe }}</span></td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-3">
+                <table class="table table-striped table-sm result-table" style="font-size: 11px;">
+                    <thead class="thead-dark">
+                        <tr>
+                          <th scope="col">Mendalan</th>
+                          <th scope="col" class="text-right">Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for column in data.columns %}
+                        <tr>
+                            {% if 'mendalan' in column.label.lower() %}
+                            <th scope="row">{{ column.label }}</th>
+                            <td id="{{ column.id }}" class="text-right"><span class="value">0.0</span> <span>{{ column.unit | safe }}</span></td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-3">
+                <table class="table table-striped table-sm result-table" style="font-size: 11px;">
+                    <thead class="thead-dark">
+                        <tr>
+                          <th scope="col">Siman</th>
+                          <th scope="col" class="text-right">Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for column in data.columns %}
+                        <tr>
+                            {% if 'siman' in column.label.lower() %}
+                            <th scope="row">{{ column.label }}</th>
+                            <td id="{{ column.id }}" class="text-right"><span class="value">0.0</span> <span>{{ column.unit | safe }}</span></td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="dataTableModal" tabindex="-1" aria-labelledby="dataTableModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="dataTableModalLabel">Beban Wlingi Perjam</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <table id="modalDataTable" class="table table-striped table-sm">
+                <thead class="thead-dark">
+                    <tr>
+                      <th scope="col" class="text-center">No.</th>
+                      <th scope="col" class="text-center">Beban (MW)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}

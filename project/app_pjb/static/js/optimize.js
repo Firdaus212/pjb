@@ -48,11 +48,11 @@ $(document).ready(function(){
                         });
                         setTableData(rows);
                     }else{
-                        $('#resultTable #'+key+' .value').text(value.toFixed(2).toString()); 
+                        $('.result-table #'+key+' .value').text(value.toFixed(2).toString()); 
                     }
                 });
                 $('#execInfo').show();
-                $('#execInfo').html('Calculation time : '+response.exec_time+' s');
+                $('#execInfo').html('Calculation time : '+response.exec_time.toFixed(2).toString()+' s');
             },
             error: function(jqXHR, textStatus, errorThrown){
                 $( "#resultTable tbody tr td .value" ).each(function( ) {
