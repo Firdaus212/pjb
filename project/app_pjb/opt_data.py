@@ -240,7 +240,7 @@ def export_to_excel(area):
         table = 'data_waduk_sutami'
     conn = create_connection(db_path)
     cur = conn.cursor()
-    cur.execute("SELECT h,q,p FROM "+table)
+    cur.execute("SELECT h,q,p FROM "+table+" ORDER BY h asc, p desc")
     rows = list(cur.fetchall())
     conn.close()
     df1 = pd.DataFrame(rows, columns=['H', 'Q', 'P'])
@@ -261,7 +261,7 @@ def update_excel_file(area):
     if table != '':
         conn = create_connection(db_path)
         cur = conn.cursor()
-        cur.execute("SELECT h,q,p FROM "+table)
+        cur.execute("SELECT h,q,p FROM "+table+" ORDER BY h asc, p desc")
         rows = list(cur.fetchall())
         conn.close()
         df1 = pd.DataFrame(rows, columns=['H', 'Q', 'P'])
