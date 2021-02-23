@@ -7,18 +7,14 @@
     </div>
     <div class="card-body">
         <div class="row">
-            <div class="col-12">
-                <img src="{{ url_for('static', filename='images/'+data.images) }}" class="img-fluid float-center area-img sms-img" alt="SMS Diagram">
-            </div>
-        </div>
-        <div class="row">
+            <!-- Input form -->
             <div class="col-3">
                 <div class="card border-info">
                     <div class="card-body">
                         <form id="inputForm">
                             {% for input in data.inputs %}
                             <div class="form-group">
-                                <!-- <label for="{{ input.name }}">{{ input.label }}</label> -->
+                                <label for="{{ input.name }}">{{ input.label }}</label>
                                 <div class="input-group input-group-sm mb-3">
                                     {% if input.type == 'number' %}
                                         <input type="number" min="{{ input.min }}" max="{{ input.max }}" step="{{ input.step }}" class="form-control text-right" id="{{ input.name }}" name="{{ input.name }}" placeholder="{{ input.label }}">
@@ -44,8 +40,23 @@
                     </div>
                 </div>
             </div>
+            <!-- End of input form -->
+            <!-- Image diagram -->
+            <div class="col-9">
+                {% for image in data.images %}
+                <div class="row">
+                    <div class="col-12">
+                        <img src="{{ url_for('static', filename='images/'+image) }}" class="img-fluid float-center area-img sms-img" alt="SMS Diagram">
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <!-- End of image diagram -->
+        </div>
+        <!-- Calculation results -->
+        <div class="row output-row">
             <div class="col-3">
-                <table class="table table-striped table-sm result-table" style="font-size: 11px;">
+                <table class="table table-striped table-sm result-table">
                     <thead class="thead-dark">
                         <tr>
                           <th scope="col">Selorejo</th>
@@ -53,19 +64,27 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% set nrows = { 'n' : 7 } %}
                         {% for column in data.columns %}
-                        <tr>
-                            {% if 'selorejo' in column.label.lower() %}
-                            <th scope="row">{{ column.label }}</th>
-                            <td id="{{ column.id }}" class="text-right"><span class="value">0.0</span> <span>{{ column.unit | safe }}</span></td>
+                            {% if 'selorejo' in column.label.lower() or column.id == 'elevasi_awal' or column.id == 'elevasi_akhir' %}
+                            {% if nrows.update({'n': nrows.n - 1}) %}{% endif %}
+                            <tr>
+                                <th scope="row">{{ column.label }}</th>
+                                <td id="{{ column.id }}" class="text-right"><span class="value">0.0</span> <span>{{ column.unit | safe }}</span></td>
+                            </tr>
                             {% endif %}
+                        {% endfor %}
+                        {% for i in range(nrows.n) %}
+                        <tr>
+                            <th scope="row">-</th>
+                            <td></td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
             <div class="col-3">
-                <table class="table table-striped table-sm result-table" style="font-size: 11px;">
+                <table class="table table-striped table-sm result-table">
                     <thead class="thead-dark">
                         <tr>
                           <th scope="col">Mendalan</th>
@@ -73,19 +92,27 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% set nrows = { 'n' : 7 } %}
                         {% for column in data.columns %}
-                        <tr>
                             {% if 'mendalan' in column.label.lower() %}
-                            <th scope="row">{{ column.label }}</th>
-                            <td id="{{ column.id }}" class="text-right"><span class="value">0.0</span> <span>{{ column.unit | safe }}</span></td>
+                            {% if nrows.update({'n': nrows.n - 1}) %}{% endif %}
+                            <tr>
+                                <th scope="row">{{ column.label }}</th>
+                                <td id="{{ column.id }}" class="text-right"><span class="value">0.0</span> <span>{{ column.unit | safe }}</span></td>
+                            </tr>
                             {% endif %}
+                        {% endfor %}
+                        {% for i in range(nrows.n) %}
+                        <tr>
+                            <th scope="row">-</th>
+                            <td></td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
             <div class="col-3">
-                <table class="table table-striped table-sm result-table" style="font-size: 11px;">
+                <table class="table table-striped table-sm result-table">
                     <thead class="thead-dark">
                         <tr>
                           <th scope="col">Siman</th>
@@ -93,18 +120,55 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% set nrows = { 'n' : 7 } %}
                         {% for column in data.columns %}
-                        <tr>
                             {% if 'siman' in column.label.lower() %}
-                            <th scope="row">{{ column.label }}</th>
-                            <td id="{{ column.id }}" class="text-right"><span class="value">0.0</span> <span>{{ column.unit | safe }}</span></td>
+                            {% if nrows.update({'n': nrows.n - 1}) %}{% endif %}
+                            <tr>
+                                <th scope="row">{{ column.label }}</th>
+                                <td id="{{ column.id }}" class="text-right"><span class="value">0.0</span> <span>{{ column.unit | safe }}</span></td>
+                            </tr>
                             {% endif %}
+                        {% endfor %}
+                        {% for i in range(nrows.n) %}
+                        <tr>
+                            <th scope="row">-</th>
+                            <td></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-3">
+                <table class="table table-striped table-sm result-table">
+                    <thead class="thead-dark">
+                        <tr>
+                          <th scope="col">Cascade</th>
+                          <th scope="col" class="text-right">Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set nrows = { 'n' : 7 } %}
+                        {% for column in data.columns %}
+                            {% if 'cascade' in column.label.lower() %}
+                            {% if nrows.update({'n': nrows.n - 1}) %}{% endif %}
+                            <tr>
+                                <th scope="row">{{ column.label }}</th>
+                                <td id="{{ column.id }}" class="text-right"><span class="value">0.0</span> <span>{{ column.unit | safe }}</span></td>
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+                        {% for i in range(nrows.n) %}
+                        <tr>
+                            <th scope="row">-</th>
+                            <td></td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
+        <!-- End of calculation results -->
     </div>
 </div>
 
@@ -136,4 +200,5 @@
       </div>
     </div>
 </div>
+<!-- End of Modal -->
 {% endblock %}

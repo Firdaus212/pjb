@@ -7,7 +7,7 @@
     </div>
     <div class="card-body">
         <div class="row">
-            <div class="col-4">
+            <div class="col-3">
                 <div class="card border-info">
                     <div class="card-body">
                         <form id="inputForm">
@@ -39,32 +39,36 @@
                     </div>
                 </div>
             </div>
-            <div class="col-8">
-                <div class="row">
-                    <div class="col-12">
-                        <img src="{{ url_for('static', filename='images/'+data.images) }}" class="img-fluid float-center area-img sengguruh-img" alt="SMS Diagram">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-4 offset-4">
-                        <table class="table table-striped table-sm result-table" style="font-size: 11px;">
-                            <thead class="thead-dark">
-                                <tr>
-                                  <th scope="col">Sengguruh</th>
-                                  <th scope="col" class="text-right">Value</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for column in data.columns %}
-                                <tr>
-                                    <th scope="row">{{ column.label }}</th>
-                                    <td id="{{ column.id }}" class="text-right"><span class="value">0.0</span> <span>{{ column.unit | safe }}</span></td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            {% for image in data.images %}
+            <div class="col-3">
+                <img src="{{ url_for('static', filename='images/'+image) }}" class="img-fluid float-center area-img sengguruh-img" alt="SMS Diagram">
+            </div>
+            {% endfor %}
+            <div class="col-3">
+                <table class="table table-striped table-sm result-table" style="font-size: 11px;">
+                    <thead class="thead-dark">
+                        <tr>
+                          <th scope="col">Sengguruh</th>
+                          <th scope="col" class="text-right">Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set nrows = { 'n' : 6 } %}
+                        {% for column in data.columns %}
+                            {% if nrows.update({'n': nrows.n - 1}) %}{% endif %}
+                            <tr>
+                                <th scope="row">{{ column.label }}</th>
+                                <td id="{{ column.id }}" class="text-right"><span class="value">0.0</span> <span>{{ column.unit | safe }}</span></td>
+                            </tr>
+                        {% endfor %}
+                        {% for i in range(nrows.n) %}
+                        <tr>
+                            <th scope="row">-</th>
+                            <td></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

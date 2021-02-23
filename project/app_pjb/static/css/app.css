@@ -73,6 +73,12 @@
 .edit-btn{
     margin-right: 5px;
 }  
+.result-table{
+    font-size: 12px;
+}
+.sms-form .form-group .input-group{
+    margin-top: 45px;
+}
 .form-control-xs {
     height: calc(1em + .375rem + 2px) !important;
     padding: .125rem .25rem !important;
@@ -84,14 +90,17 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 25px;
+    margin-bottom: 0px;
 }
 .sms-img{
-    width:75%;
-}
-.sutami-img{
     width:70%;
 }
+.sutami-img{
+    width:45%;
+}
 .sengguruh-img{
-    width:25%;
+    width:70%;
+}
+.output-row{
+    margin-top: 10px;
 }

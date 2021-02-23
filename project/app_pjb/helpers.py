@@ -26,7 +26,7 @@ def get_sms_opt_1_page_data():
         { 'label': "Time Frame", 'name': 't', 'type': 'text', 'unit': 'jam' }
     ]
     data['columns'] = [
-        { 'label': 'Inflow', 'id': 'inflow', 'unit': 'm&sup3;/s' },
+        { 'label': 'Inflow Selorejo', 'id': 'inflow', 'unit': 'm&sup3;/s' },
         { 'label': 'Elevasi Awal', 'id': 'elevasi_awal', 'unit': 'mdpl' },
         { 'label': 'Elevasi Akhir', 'id': 'elevasi_akhir', 'unit': 'mdpl' },
         { 'label': 'Outflow Selorejo', 'id': 'outflow_selorejo', 'unit': 'm&sup3;/s' },
@@ -39,7 +39,7 @@ def get_sms_opt_1_page_data():
         { 'label': 'Daya Output Mendalan #4', 'id': 'daya_output_mendalan_4', 'unit': 'MW' },
         { 'label': 'Total Daya Output Mendalan', 'id': 'total_daya_output_mendalan', 'unit': 'MW' },
         { 'label': 'Energi Output Mendalan', 'id': 'energi_output_mendalan', 'unit': 'MWh' },
-        { 'label': 'Suplesi', 'id': 'suplesi', 'unit': 'm&sup3;/s' },
+        { 'label': 'Suplesi Siman', 'id': 'suplesi', 'unit': 'm&sup3;/s' },
         { 'label': 'Inflow Siman', 'id': 'inflow_siman', 'unit': 'm&sup3;/s' },
         { 'label': 'Daya Output Siman #1', 'id': 'daya_output_siman_1', 'unit': 'MW' },
         { 'label': 'Daya Output Siman #2', 'id': 'daya_output_siman_2', 'unit': 'MW' },
@@ -50,7 +50,7 @@ def get_sms_opt_1_page_data():
     data['hidden_input_value'] = area_sms_1
     data['js'] = js_optimize_file
     data['data_url'] = url_for('main.optimize')
-    data['images'] = 'sms1.png'
+    data['images'] = ['sms1.png', 'sms2.png']
     return data
 
 def get_sms_opt_2_page_data():
@@ -64,7 +64,7 @@ def get_sms_opt_2_page_data():
         { 'label': "Time Frame", 'name': 't', 'type': 'text', 'unit': 'jam' }
     ]
     data['columns'] = [
-        { 'label': 'Inflow', 'id': 'inflow', 'unit': 'm&sup3;/s' },
+        { 'label': 'Inflow Selorejo', 'id': 'inflow', 'unit': 'm&sup3;/s' },
         { 'label': 'Elevasi Awal', 'id': 'elevasi_awal', 'unit': 'mdpl' },
         { 'label': 'Elevasi Akhir', 'id': 'elevasi_akhir', 'unit': 'mdpl' },
         { 'label': 'Outflow Selorejo', 'id': 'outflow_selorejo', 'unit': 'm&sup3;/s' },
@@ -77,7 +77,7 @@ def get_sms_opt_2_page_data():
         { 'label': 'Daya Output Mendalan #4', 'id': 'daya_output_mendalan_4', 'unit': 'MW' },
         { 'label': 'Total Daya Output Mendalan', 'id': 'total_daya_output_mendalan', 'unit': 'MW' },
         { 'label': 'Energi Output Mendalan', 'id': 'energi_output_mendalan', 'unit': 'MWh' },
-        { 'label': 'Suplesi', 'id': 'suplesi', 'unit': 'm&sup3;/s' },
+        { 'label': 'Suplesi Siman', 'id': 'suplesi', 'unit': 'm&sup3;/s' },
         { 'label': 'Inflow Siman', 'id': 'inflow_siman', 'unit': 'm&sup3;/s' },
         { 'label': 'Daya Output Siman #1', 'id': 'daya_output_siman_1', 'unit': 'MW' },
         { 'label': 'Daya Output Siman #2', 'id': 'daya_output_siman_2', 'unit': 'MW' },
@@ -88,7 +88,7 @@ def get_sms_opt_2_page_data():
     data['hidden_input_value'] = area_sms_2
     data['js'] = js_optimize_file
     data['data_url'] = url_for('main.optimize')
-    data['images'] = 'sms2.png'
+    data['images'] = ['sms1.png', 'sms2.png']
     return data
 
 def get_sutami_wlingi_wet_opt_page_data():
@@ -117,13 +117,13 @@ def get_sutami_wlingi_wet_opt_page_data():
         { 'label': 'Energi Sutami #3', 'id': 'energi_sutami_3', 'unit': 'MWh' },
         { 'label': 'Energi Total Sutami', 'id': 'energi_total_sutami', 'unit': 'MWh' },
         { 'label': 'Beban Wlingi Perjam', 'id': 'beban_wlingi_perjam', 'unit': '' },
-        { 'label': 'Energi Wlingi', 'id': 'energi_wlingi', 'unit': 'MW' }
+        { 'label': 'Energi Wlingi', 'id': 'energi_wlingi', 'unit': 'MWh' }
        
     ]
     data['hidden_input_value'] = area_sutami_wlingi_basah
     data['js'] = js_optimize_file
     data['data_url'] = url_for('main.optimize')
-    data['images'] = 'sw1.png'
+    data['images'] = ['sw1.png', 'sw2.png']
     return data
 
 def get_sutami_wlingi_dry_opt_page_data():
@@ -132,38 +132,34 @@ def get_sutami_wlingi_dry_opt_page_data():
     data['inputs'] = [
         { 'label': "Elevasi Awal", 'name': 'elevasi_awal', 'type': 'text', 'unit': 'mdpl' },
         { 'label': "Elevasi Akhir", 'name': 'elevasi_akhir', 'type': 'text', 'unit': 'mdpl' },
-        { 'label': "Inflow", 'name': 'inflow', 'type': 'text', 'unit': 'm&sup3;/s' },
+        { 'label': "Inflow Min", 'name': 'inflow_min', 'type': 'text', 'unit': 'm&sup3;/s' },
+        { 'label': "Inflow Max", 'name': 'inflow_max', 'type': 'text', 'unit': 'm&sup3;/s' },
         { 'label': "Jam Operasi Sutami 1", 'name': 't1', 'type': 'text', 'unit': 'jam' },
         { 'label': "Jam Operasi Sutami 2", 'name': 't2', 'type': 'text', 'unit': 'jam' },
         { 'label': "Jam Operasi Sutami 3", 'name': 't3', 'type': 'text', 'unit': 'jam' },
+        { 'label': "Elevasi Awal Wlingi", 'name': 'elevasi_awal_wlingi', 'type': 'text', 'unit': 'mdpl' },
         { 'label': "Beban Wlingi", 'name': 'beban_wlingi', 'type': 'text', 'unit': 'MW' },
-        { 'label': "Elevasi Real Wlingi", 'name': 'elevasi_real_wlingi', 'type': 'text', 'unit': 'mdpl' },
-        { 'label': "Elevasi Target Wlingi", 'name': 'elevasi_target_wlingi', 'type': 'text', 'unit': 'mdpl' },
-        { 'label': "Q Wlingi Yesterday", 'name': 'q_wlingi_yesterday', 'type': 'text', 'unit': 'm&sup3;/s' },
-        { 'label': "Jam Mati Wlingi Kemarin", 'name': 'jam_mati_wlingi_kemarin', 'type': 'text', 'unit': 'jam' }
+        { 'label': "Jam Akhir Operasi", 'name': 'jam_end', 'type': 'text', 'unit': 'jam' }
     ]
     data['columns'] = [
-        { 'label': 'Vol Tersedia', 'id': 'vol_tersedia', 'unit': 'm&sup3;' },
-        { 'label': 'Vol Used', 'id': 'vol_used', 'unit': 'm&sup3;' },
-        { 'label': 'Volume Sisa', 'id': 'volume_sisa', 'unit': 'm&sup3;' },
-        { 'label': 'Mean Beban Sutami #1', 'id': 'mean_beban_sutami_1', 'unit': 'MW' },
-        { 'label': 'Mean Beban Sutami #2', 'id': 'mean_beban_sutami_2', 'unit': 'MW' },
-        { 'label': 'Mean Beban Sutami #3', 'id': 'mean_beban_sutami_3', 'unit': 'MW' },
-        { 'label': 'Sum Beban Sutami #1', 'id': 'sum_beban_sutami_1', 'unit': 'MW' },
-        { 'label': 'Sum Beban Sutami #2', 'id': 'sum_beban_sutami_2', 'unit': 'MW' },
-        { 'label': 'Sum Beban Sutami #3', 'id': 'sum_beban_sutami_3', 'unit': 'MW' },
-        { 'label': 'Beban Total Sutami', 'id': 'beban_total_sutami', 'unit': 'MW' },
-        { 'label': 'Beban Total Wlingi', 'id': 'beban_total_wlingi', 'unit': 'MW' },
-        { 'label': 'Jam Mulai Operasi Today', 'id': 'jam_mulai_operasi_today', 'unit': 'jam' },
-        { 'label': 'Jam Mati Operasi Wlingi', 'id': 'jam_mati_operasi_wlingi', 'unit': 'jam' },
-        { 'label': 'Waktu Operasi Wlingi', 'id': 'waktu_operasi_wlingi', 'unit': 'jam' },
-        { 'label': 'Energi Cascade', 'id': 'energi_cascade', 'unit': 'MWh' },
+        { 'label': 'Beban Sutami Mean #1', 'id': 'beban_sutami_1_mean', 'unit': 'MW' },
+        { 'label': 'Beban Sutami Mean #2', 'id': 'beban_sutami_2_mean', 'unit': 'MW' },
+        { 'label': 'Beban Sutami Mean #3', 'id': 'beban_sutami_3_mean', 'unit': 'MW' },
+        { 'label': 'Energi Sutami #1', 'id': 'energi_sutami_1', 'unit': 'MWh' },
+        { 'label': 'Energi Sutami #2', 'id': 'energi_sutami_2', 'unit': 'MWh' },
+        { 'label': 'Energi Sutami #3', 'id': 'energi_sutami_3', 'unit': 'MWh' },
+        { 'label': 'Energi Total Sutami', 'id': 'energi_total_sutami', 'unit': 'MWh' },
+        { 'label': 'Beban Wlingi Komulatif', 'id': 'beban_wlingi_komulatif', 'unit': 'MW' },
+        { 'label': 'Jam Start', 'id': 'jam_start', 'unit': 'jam' },
+        { 'label': 'Jam Mati', 'id': 'jam_mati', 'unit': 'jam' },
+        { 'label': 'Elevasi Ketika Start', 'id': 'elevasi_ketika_start', 'unit': 'mdpl' },
+        { 'label': 'Elevasi Ketika Mati', 'id': 'elevasi_ketika_mati', 'unit': 'mdpl' },
        
     ]
     data['hidden_input_value'] = area_sutami_wlingi_kering
     data['js'] = js_optimize_file
     data['data_url'] = url_for('main.optimize')
-    data['images'] = 'sw2.png'
+    data['images'] = ['sw1.png', 'sw2.png']
     return data
 
 def get_sengguruh_opt_page_data():
@@ -183,7 +179,7 @@ def get_sengguruh_opt_page_data():
     data['hidden_input_value'] = area_sengguruh
     data['js'] = js_optimize_file
     data['data_url'] = url_for('main.optimize')
-    data['images'] = 'sengguruh.png'
+    data['images'] = ['sengguruh.png', 'sengguruh2.png']
     return data
 
 def get_table_column_data(area):

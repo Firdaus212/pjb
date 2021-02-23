@@ -51,14 +51,16 @@
                 </div>
             </div>
             <div class="col-8">
+                {% for image in data.images %}
                 <div class="row">
                     <div class="col-12">
-                        <img src="{{ url_for('static', filename='images/'+data.images) }}" class="img-fluid float-center area-img sutami-img" alt="SMS Diagram">
+                        <img src="{{ url_for('static', filename='images/'+image) }}" class="img-fluid float-center area-img sutami-img" alt="SMS Diagram">
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-4 offset-4">
-                        <table class="table table-striped table-sm result-table" style="font-size: 11px;">
+                {% endfor %}
+                <div class="row output-row">
+                    <div class="col-6">
+                        <table class="table table-striped table-sm result-table">
                             <thead class="thead-dark">
                                 <tr>
                                   <th scope="col">Sutami</th>
@@ -67,43 +69,70 @@
                             </thead>
                             <tbody>
                                 {% for column in data.columns %}
+                                {% if 'sutami' in column.label.lower() %}
                                 <tr>
-                                    {% if 'sutami' in column.label.lower() %}
                                     <th scope="row">{{ column.label }}</th>
                                     <td id="{{ column.id }}" class="text-right"><span class="value">0.0</span> <span>{{ column.unit | safe }}</span></td>
-                                    {% endif %}
                                 </tr>
+                                {% endif %}
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-4">
-                        <table class="table table-striped table-sm result-table" style="font-size: 11px;">
-                            <thead class="thead-dark">
-                                <tr>
-                                  <th scope="col">Wlingi</th>
-                                  <th scope="col" class="text-right">Value</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for column in data.columns %}
-                                <tr>
-                                    {% if 'wlingi' in column.label.lower() %}
-                                        <th scope="row">{{ column.label }}</th>
-                                        {% if column.id == 'beban_wlingi_perjam' %}
-                                            <td id="{{ column.id }}" class="text-right"><span class="value">
-                                                <a href="javascript:void(0);" data-toggle="modal" data-target="#dataTableModal">
-                                                    View data
-                                                </a>
-                                            </td>
-                                        {% else %}
-                                            <td id="{{ column.id }}" class="text-right"><span class="value">0.0</span> <span>{{ column.unit | safe }}</span></td>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table table-striped table-sm result-table">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                          <th scope="col">Wlingi</th>
+                                          <th scope="col" class="text-right">Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for column in data.columns %}
+                                        {% if 'wlingi' in column.label.lower() or column.id == 'jam_start' or column.id == 'jam_mati' 
+                                        or column.id == 'elevasi_ketika_start' or column.id == 'elevasi_ketika_mati' %}
+                                        <tr>
+                                            <th scope="row">{{ column.label }}</th>
+                                            {% if column.id == 'beban_wlingi_perjam' %}
+                                                <td id="{{ column.id }}" class="text-right"><span class="value">
+                                                    <a href="javascript:void(0);" data-toggle="modal" data-target="#dataTableModal">
+                                                        View data
+                                                    </a>
+                                                </td>
+                                            {% else %}
+                                                <td id="{{ column.id }}" class="text-right"><span class="value">0.0</span> <span>{{ column.unit | safe }}</span></td>
+                                            {% endif %}
+                                        </tr>
                                         {% endif %}
-                                    {% endif %}
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table table-striped table-sm result-table">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                          <th scope="col">Cascade</th>
+                                          <th scope="col" class="text-right">Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for column in data.columns %}
+                                        {% if 'cascade' in column.label.lower() %}
+                                        <tr>
+                                            <th scope="row">{{ column.label }}</th>
+                                            <td id="{{ column.id }}" class="text-right"><span class="value">0.0</span> <span>{{ column.unit | safe }}</span></td>
+                                        </tr>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
