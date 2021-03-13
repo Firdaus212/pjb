@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center align-middle" style="margin-top: 50px;">
+  <div class="col-xs-12 col-sm-12 col-md-10 col-lg-8">
+    <div class="card bg-warning">
+      <div class="card-body nf">
+        <p class="nf-code"><i class="fas fa-hand-paper"></i> 403</p>
+        <p class="nf-desc">SORRY YOU'RE NOT AUTHORIZED</p>
+        <p class="nf-message">We're sorry, you don't have privilege to access this page.</p>
+        <p><a href="{{ url_for('main.index') }}" class="btn btn-primary btn-round">Home Page</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -38,7 +38,7 @@
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownSms" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       Cascade SMS Opt
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownSms">
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownSms">
                       <a class="dropdown-item" href="{{ url_for('main.optimization', area='sms1') }}">Cascade SMS Opt 1</a>
                       <a class="dropdown-item" href="{{ url_for('main.optimization', area='sms2') }}">Cascade SMS Opt 2</a>
                     </div>
@@ -47,7 +47,7 @@
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownSutami" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       Cascade Sutami-Wlingi Opt
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownSutami">
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownSutami">
                       <a class="dropdown-item" href="{{ url_for('main.optimization', area='sutami-wlingi-basah') }}">Cascade Sutami-Wlingi Basah Opt</a>
                       <a class="dropdown-item" href="{{ url_for('main.optimization', area='sutami-wlingi-kering') }}">Cascade Sutami-Wlingi Kering Opt</a>
                     </div>
@@ -55,11 +55,12 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('main.optimization', area='sengguruh' ) }}">Sengguruh Opt</a>
                 </li>
+                {% if current_user and current_user.role == 'admin' %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownOptData" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       Opt Data
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownOptData">
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownOptData">
                       <a class="dropdown-item" href="{{ url_for('opt_data.data', area='sms1') }}">SMS 1</a>
                       <a class="dropdown-item" href="{{ url_for('opt_data.data', area='sms2') }}">SMS 2</a>
                       <a class="dropdown-item" href="{{ url_for('opt_data.data_waduk', area='sms') }}">Data Waduk SMS</a>
@@ -72,9 +73,16 @@
                 <!-- <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('auth.profile') }}">Profile</a>
                 </li> -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('main.matlab_files') }}">Files</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMisc" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Misc
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMisc">
+                        <a class="dropdown-item" href="{{ url_for('main.matlab_files') }}">Files</a>
+                        <a class="dropdown-item" href="{{ url_for('main.users') }}">Users</a>
+                    </div>
                 </li>
+                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('auth.logout') }}">Log out</a>
                 </li>

@@ -6,6 +6,8 @@ import io, time, os, re
 from .helpers import *
 import matlab.engine
 import pandas as pd
+from .permission import admin_authority
+from werkzeug.security import generate_password_hash
 
 main = Blueprint('main', __name__)
 base_app_path = os.path.abspath(os.path.dirname(__file__)).replace('\\', '/')
@@ -121,8 +123,6 @@ def index():
     name = current_user.name if hasattr(current_user, 'name') else ""
     return render_template('index.html', name=name)
 
-
-
 # Page not found route
 @main.route('/not_found')
 # @login_required
@@ -191,6 +191,7 @@ def optimize():
 # Matlab files page route
 @main.route('/matlab-files', methods=['GET'])
 @login_required
+@admin_authority
 def matlab_files():
     data = {}
     data['title'] = "Matlab Files for Optimization"
@@ -203,6 +204,7 @@ def matlab_files():
 # Route for downloading matlab file saved on the server
 @main.route('/download/<string:folder>/<string:filename>', methods=['GET'])
 @login_required
+@admin_authority
 def download(folder, filename):
     folder_name = ''
 
@@ -217,3 +219,80 @@ def download(folder, filename):
         return send_file(folder_name + '\\' +filename, as_attachment=True, cache_timeout=0)
     else:
         return make_response(jsonify({'status': 'error', 'msg': 'File not found'}), 400, headers)  
+
+# Route for downloading matlab file saved on the server
+@main.route('/users', methods=['GET'])
+@login_required
+@admin_authority
+def users():
+    data = get_user_page_data()
+    return render_template('users.html', data=data)
+
+# Get optimization data for ajax call
+@main.route('/get-user-list', methods=['POST'])
+@login_required
+@admin_authority
+def get_user_list():
+    draw = int(request.form.get('draw'))
+    offset = int(request.form.get('start'))
+    limit = int(request.form.get('length'))
+    total = 0
+
+    info = User.query.order_by(User.id).offset(offset).limit(limit).all()
+    total = User.query.count()
+
+    data = []
+    for inf in info:
+        item = {}
+        for key in inf.__table__.columns.keys():
+            if key != 'password':
+                item[key] = getattr(inf, key)
+        data.append(item)
+    resp_info = {
+        "draw": draw,
+        "recordsTotal": total,
+        "recordsFiltered": total,
+        "data": data
+    }
+    return make_response(jsonify(resp_info), 200, headers)
+
+@main.route('/add-user', methods=['POST'])
+@login_required
+@admin_authority
+def add_user():
+    email = request.form.get('email')
+    name = request.form.get('name')
+    password = request.form.get('password')
+    role = request.form.get('role')
+
+    new_data = User(email=email, name=name, role=role, password=generate_password_hash(password, method='sha256'))
+    try:
+        db.session.add(new_data)
+        db.session.commit()
+    except Exception as e:
+        return make_response(jsonify({'msg': str(e)}), 400, headers)
+    return make_response(jsonify({'data': 'success'}), 200, headers)
+
+@main.route('/edit-user/<int:entity_id>', methods=['PATCH'])
+@login_required
+@admin_authority
+def edit_data_waduk(entity_id):
+    post_data = request.form.to_dict() 
+    edited_data = User.query.filter_by(id=entity_id).first()
+    if edited_data != None:
+        try:
+            for key in post_data:
+                if key == 'name' or key == 'role':
+                    setattr(edited_data, key, post_data[key])
+            db.session.commit()
+        except Exception as e:
+            return make_response(jsonify({'msg': str(e)}), 400, headers)
+    return make_response(jsonify({'msg': 'success'}), 200, headers)
+
+@main.route('/delete-user/<int:entity_id>', methods=['DELETE'])
+@login_required
+@admin_authority
+def delete_user(entity_id):
+    User.query.filter_by(id = entity_id).delete()
+    db.session.commit()
+    return make_response(jsonify({'data': 'success'}), 200, headers)

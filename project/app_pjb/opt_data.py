@@ -9,6 +9,7 @@ import pandas as pd
 from werkzeug.utils import secure_filename
 from .db_helper import create_connection, batch_insert
 from werkzeug.utils import secure_filename
+from .permission import admin_authority
 
 opt_data = Blueprint('opt_data', __name__)
 
@@ -28,6 +29,7 @@ def allowed_file(filename):
 # Optimization data page route
 @opt_data.route('/data/<string:area>')
 @login_required
+@admin_authority
 def data(area):
     data = get_table_column_data(area)
     if data == {}:
@@ -37,6 +39,7 @@ def data(area):
 # Get optimization data for ajax call
 @opt_data.route('/table-data/<string:area>', methods=['POST'])
 @login_required
+@admin_authority
 def table_data(area):
     draw = int(request.form.get('draw'))
     offset = int(request.form.get('start'))
@@ -77,6 +80,7 @@ def table_data(area):
 # Route for ajax call for emptying optimization data table
 @opt_data.route('/empty-table/<string:area>', methods=['GET'])
 @login_required
+@admin_authority
 def empty_table(area):
     record_deleted = -1
     if area == area_sms_1:
@@ -102,6 +106,7 @@ def empty_table(area):
 
 @opt_data.route('/data_waduk/<string:area>', methods=['GET'])
 @login_required
+@admin_authority
 def data_waduk(area):
     data = get_data_waduk_page_data(area)
     if data == {}:
@@ -110,12 +115,15 @@ def data_waduk(area):
 
 @opt_data.route('/upload-data-waduk', methods=['GET'])
 @login_required
+@admin_authority
 def upload_data_waduk():
     data = {}
     data['title'] = 'Upload Data Waduk to Database'
     return render_template('upload-data-waduk.html', data=data)
 
 @opt_data.route('/do-upload', methods=['POST'])
+@login_required
+@admin_authority
 def do_upload():
     area = request.form.get('area')
     db_table = ''
@@ -168,6 +176,7 @@ def do_upload():
 # Get optimization data for ajax call
 @opt_data.route('/get-data-waduk/<string:area>', methods=['POST'])
 @login_required
+@admin_authority
 def get_data_waduk(area):
     draw = int(request.form.get('draw'))
     offset = int(request.form.get('start'))
@@ -200,6 +209,7 @@ def get_data_waduk(area):
 
 @opt_data.route('/pivot-data-waduk/<string:area>', methods=['GET'])
 @login_required
+@admin_authority
 def pivot_data_waduk(area):
     data = {}
     data['js'] = 'pivot.js'
@@ -215,6 +225,7 @@ def pivot_data_waduk(area):
 
 @opt_data.route('/get-pivot-data-waduk/<string:area>', methods=['GET'])
 @login_required
+@admin_authority
 def get_pivot_data_waduk(area):
     table = ''
     rows = [[0,0,0]]
@@ -232,6 +243,7 @@ def get_pivot_data_waduk(area):
 
 @opt_data.route('/export-to-excel/<string:area>', methods=['GET'])
 @login_required
+@admin_authority
 def export_to_excel(area):
     table = ''
     if area == data_waduk_area_sms:
@@ -250,6 +262,7 @@ def export_to_excel(area):
 
 @opt_data.route('/update-excel-file/<string:area>')
 @login_required
+@admin_authority
 def update_excel_file(area):
     table = ''
     if area == data_waduk_area_sms:
@@ -269,6 +282,8 @@ def update_excel_file(area):
     return make_response(jsonify({'data': 'success'}), 200, headers)
 
 @opt_data.route('/add-data-waduk/<string:area>', methods=['POST'])
+@login_required
+@admin_authority
 def add_data_waduk(area):
     post_data = request.form.to_dict()
     del post_data['entity_id']
@@ -286,6 +301,8 @@ def add_data_waduk(area):
     return make_response(jsonify({'data': 'success'}), 200, headers)
 
 @opt_data.route('/edit-data-waduk/<string:area>/<int:entity_id>', methods=['PATCH'])
+@login_required
+@admin_authority
 def edit_data_waduk(area, entity_id):
     post_data = request.form.to_dict() 
     edited_data = None
@@ -304,6 +321,8 @@ def edit_data_waduk(area, entity_id):
     return make_response(jsonify({'msg': 'success'}), 200, headers)
 
 @opt_data.route('/delete-data-waduk/<string:area>/<int:entity_id>', methods=['DELETE'])
+@login_required
+@admin_authority
 def delete_data_waduk(area, entity_id):
     if area == data_waduk_area_sms:
         DataWadukSms.query.filter_by(id = entity_id).delete()
@@ -314,6 +333,8 @@ def delete_data_waduk(area, entity_id):
     return make_response(jsonify({'data': 'success'}), 200, headers)
 
 @opt_data.route('/update-matlab-file', methods=['POST'])
+@login_required
+@admin_authority
 def update_matlab_file():
     if 'area' not in request.form or 'filename' not in request.form:
         flash('Inputs are not valid', 'error')

@@ -237,3 +237,12 @@ def get_data_waduk_page_data(area):
         data = {}
 
     return data
+
+def get_user_page_data():
+    data = {}
+    data['column'] = ['id', 'email', 'name', 'role']
+    data['js'] = 'user.js'
+    data['title'] = "List of User"
+    data['url'] = url_for('main.get_user_list')
+
+    return data
