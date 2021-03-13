@@ -127,7 +127,7 @@ def index():
 @main.route('/not_found')
 # @login_required
 def not_found():
-    return render_template('404.html', data=data)
+    return render_template('404.html', data=None)
 
 # Optimization page route
 @main.route('/optimization/<string:area>', methods=['GET'])
