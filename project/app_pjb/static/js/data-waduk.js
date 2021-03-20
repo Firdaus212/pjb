@@ -184,4 +184,32 @@ $(document).ready( function () {
         $('#dataWadukModal').modal('show');
     });
 
+    $('#importBtn').on('click', function (e){
+        $('#importDataWadukModal').modal('show');
+    });
+
+    $.ajax({
+        type: "GET",
+        url: "/opt-data/data-waduk-model/"+$('#table_id').attr('data-area'),
+        dataType: "JSON",
+        success: function (response) {
+            $(".d-flex.justify-content-center").addClass('hide-spinner');
+            $.each(response.data, function (idx, model) { 
+                 var content = "";
+                 content += "<b>"+model.modeltype+" :</b><br>";
+                 content += "f(x) = "+model.formula+"<br>";
+                 content += "<b>Coefficients :</b><br>";
+                 $.each(model.coeffnames, function (i, name) { 
+                        if(model.coeffvalues[i].charAt(0) == '-')
+                            content += model.coeffnames[i]+" : "+model.coeffvalues[i]+"<br>";
+                        else
+                            content += model.coeffnames[i]+" : &nbsp;"+model.coeffvalues[i]+"<br>";
+                 });
+                 content += "<b>Figure :</b><br><br>";
+                 content += "<img class='img-fluid' src='/static/images/"+idx+".png?"+performance.now()+"'>";
+                 $('#'+idx).append(content);
+            });
+        }
+    });
+
 } );

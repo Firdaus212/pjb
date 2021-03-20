@@ -104,3 +104,9 @@
 .output-row{
     margin-top: 10px;
 }
+.model-col{
+    margin-top: 25px;
+}
+.hide-spinner{
+    display: none !important;
+}

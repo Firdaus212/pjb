@@ -7,8 +7,12 @@ area_sms_2 = 'sms2'
 area_sutami_wlingi_basah = 'sutami-wlingi-basah'
 area_sutami_wlingi_kering = 'sutami-wlingi-kering'
 area_sengguruh = 'sengguruh'
-data_waduk_area_sms = 'sms'
-data_waduk_area_sutami = 'sutami-wlingi'
+data_waduk_area_selorejo = 'selorejo'
+data_waduk_area_mendalan = 'mendalan'
+data_waduk_area_siman = 'siman'
+data_waduk_area_sutami = 'sutami'
+data_waduk_area_wlingi = 'wlingi'
+data_waduk_area_sutami2 = 'sutami2'
 js_optimize_file = 'optimize.js'
 js_data_file = 'data.js'
 js_data_waduk_file = 'data-waduk.js'
@@ -223,16 +227,61 @@ def get_table_column_data(area):
 
 def get_data_waduk_page_data(area):
     data = {}
-    data['column'] = ['id', 'H', 'P', 'Q']
     data['js'] = js_data_waduk_file
     data['url'] = url_for('opt_data.get_data_waduk', area=area)
     data['empty_url'] = url_for('opt_data.empty_table', area=area)
     data['area'] = area
 
-    if area == data_waduk_area_sms:
-        data['title'] = "Data Waduk SMS"
+    if area == data_waduk_area_selorejo:
+        data['column'] = ['id', 'H', 'P', 'Q']
+        data['model'] = [
+            { 'id': 'vol', 'title': 'Volume Model' },
+            { 'id': 'ele', 'title': 'Elevation Model' },
+            { 'id': 'fQ', 'title': 'fQ Model' },
+            { 'id': 'fP', 'title': 'fP Model' }
+        ]
+        data['title'] = "Data Waduk Selorejo"
+        data['table'] = "data_waduk_selorejo"
+    elif area == data_waduk_area_mendalan:
+        data['column'] = ['id', 'PM1', 'QM1', 'PM2', 'QM2', 'PM3', 'QM3', 'PM4', 'QM4' ]
+        data['model'] = [
+            { 'id': 'Pm1', 'title': 'Pm1 Model' },
+            { 'id': 'Pm2', 'title': 'Pm2 Model' },
+            { 'id': 'Pm3', 'title': 'Pm3 Model' },
+            { 'id': 'Pm4', 'title': 'Pm4 Model' }
+        ]
+        data['title'] = "Data Waduk Mendalan"
+        data['table'] = "data_waduk_mendalan"
+    elif area == data_waduk_area_siman:
+        data['column'] = ['id', 'PS1', 'QS1', 'PS2', 'QS2', 'PS3', 'QS3']
+        data['model'] = [
+            { 'id': 'Ps1', 'title': 'Ps1 Model' },
+            { 'id': 'Ps2', 'title': 'Ps2 Model' },
+            { 'id': 'Ps3', 'title': 'Ps3 Model' },
+        ]
+        data['title'] = "Data Waduk Siman"
+        data['table'] = "data_waduk_siman"
     elif area == data_waduk_area_sutami:
-        data['title'] = "Data Waduk Sutami-Wlingi"
+        data['column'] = ['id', 'Elevation', 'Volume']
+        data['model'] = [
+            { 'id': 'f_vol_sutami', 'title': 'Volume Sutami Model' },
+        ]
+        data['title'] = "Data Waduk Sutami"
+        data['table'] = "data_waduk_sutami"
+    elif area == data_waduk_area_wlingi:
+        data['column'] = ['id', 'Elevation', 'Volume']
+        data['model'] = [
+            { 'id': 'f_vol_lahor', 'title': 'Volume Wlingi Model' },
+        ]
+        data['title'] = "Data Waduk Wlingi"
+        data['table'] = "data_waduk_wlingi"
+    elif area == data_waduk_area_sutami2:
+        data['column'] = ['id', 'H', 'P', 'Q']
+        data['model'] = [
+            { 'id': 'fungsi_p', 'title': 'Sutami P Function Model' },
+        ]
+        data['title'] = "Data Waduk Sutami Operasi"
+        data['table'] = "data_waduk_sutami_operasi"
     else:
         data = {}
 

@@ -1,36 +1,36 @@
 function result = sms2(input)
-    warning('off');
+    warning('off')
     h0 = input.h0;
     ht = input.ht;
     q_in = input.q_in;
     t = input.t;
     suplesi = input.suplesi;
 
-    M = xlsread('performanceMS','mendalan','A1:K6');
-    PM1 = M(1:5,1);
-    QM1 = M(1:5,2);
-    PM2 = M(:,4);
-    QM2 = M(:,5);
-    PM3 = M(:,7);
-    QM3 = M(:,8);
-    PM4 = M(:,10);
-    QM4 = M(:,11);
+    Mendalan = readmatrix('Performance Mendalan.xlsx','Sheet','Mendalan','Range','A2:H2000');
+    PM1 = Mendalan(isfinite(Mendalan(:, 1)), 1);
+    QM1 = Mendalan(isfinite(Mendalan(:, 2)), 2);
+    PM2 = Mendalan(isfinite(Mendalan(:, 3)), 3);
+    QM2 = Mendalan(isfinite(Mendalan(:, 4)), 4);
+    PM3 = Mendalan(isfinite(Mendalan(:, 5)), 5);
+    QM3 = Mendalan(isfinite(Mendalan(:, 6)), 6);
+    PM4 = Mendalan(isfinite(Mendalan(:, 7)), 7);
+    QM4 = Mendalan(isfinite(Mendalan(:, 8)), 8);
 
-    S = xlsread('performanceMS','siman','A1:H18');
-    PS1 = S(:,1);
-    QS1 = S(:,2);
-    PS2 = S(:,4);
-    QS2 = S(:,5);
-    PS3 = S(:,7);
-    QS3 = S(:,8);
+    Siman = readmatrix('Performance Siman.xlsx','Sheet','Siman','Range','A2:F2000');
+    PS1 = Siman(isfinite(Siman(:, 1)), 1);
+    QS1 = Siman(isfinite(Siman(:, 2)), 2);
+    PS2 = Siman(isfinite(Siman(:, 3)), 3);
+    QS2 = Siman(isfinite(Siman(:, 4)), 4);
+    PS3 = Siman(isfinite(Siman(:, 5)), 5);
+    QS3 = Siman(isfinite(Siman(:, 6)), 6);
 
-    data_waduk = xlsread('data_waduk','aa','A2:B240');
-    data_elevasi = data_waduk(:,1);
-    data_vol = data_waduk(:,2);
-    data_waduk = xlsread('abb','A2:C5991');
-    H = data_waduk(:,1);
-    Q = data_waduk(:,2);
-    P = data_waduk(:,3);
+    data_waduk_SJ = readmatrix('Elevasi X Volume Selorejo.xlsx','Sheet','ElevasixVolume Selorejo','Range','A2:B2000');
+    data_elevasi = data_waduk_SJ(isfinite(data_waduk_SJ(:, 1)), 1);
+    data_vol = data_waduk_SJ(isfinite(data_waduk_SJ(:, 2)), 2);
+    data_Performance_selorejo = readmatrix('Performance Selorejo.xlsx','Sheet','Selorejo','Range','A2:C20000');
+    H = data_Performance_selorejo(isfinite(data_Performance_selorejo(:, 1)), 1);
+    Q = data_Performance_selorejo(isfinite(data_Performance_selorejo(:, 2)), 2);
+    P = data_Performance_selorejo(isfinite(data_Performance_selorejo(:, 3)), 3);
     m1=[1 12 13 14 123 124 134 1234];
     m2=[2 12 23 24 123 124 234 1234];
     m3=[3 23 13 34 123 234 134 1234];
@@ -164,7 +164,7 @@ function result = sms2(input)
 
     Psmn=Ps_1+Ps_2+Ps_3;
     Esmn= round((t*Psmn),2);
-    
+
     result = [];
     result.inflow = q_in;
     result.elevasi_awal = h0;

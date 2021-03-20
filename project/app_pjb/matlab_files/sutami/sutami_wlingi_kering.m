@@ -16,10 +16,10 @@ function [outputArg] = sutami_wlingi_k(input)
     %% Waktu operasi total
     time = (t1(2)-t1(1))+t2(2)-t2(1)+t3(2)-t3(1);
     %% Data Sutami
-    waduk_sutami = xlsread('data_waduk','waduk_sutami');
+    waduk_sutami = xlsread('data_waduk_sutami');
     elevasi_sutami = waduk_sutami(:,1);
     volume_sutami = waduk_sutami(:,2);
-    waduk_lahor= xlsread('data_waduk','waduk_lahor');
+    waduk_lahor= xlsread('data_waduk_wlingi');
     elevasi_lahor = waduk_lahor(:,1);
     volume_lahor = waduk_lahor(:,2);
     data_beban = xlsread('data_operasi_sutami');

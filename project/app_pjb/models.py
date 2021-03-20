@@ -98,17 +98,47 @@ class Sengguruh(db.Model):
     total_beban = db.Column(db.Float)
     total_energi = db.Column(db.Float)
 
-class DataWadukSms(db.Model):
+class DataWadukSelorejo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     h = db.Column(db.Float)
     p = db.Column(db.Float)
     q = db.Column(db.Float)
+
+class DataWadukMendalan(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    pm1 = db.Column(db.Float)
+    qm1 = db.Column(db.Float)
+    pm2 = db.Column(db.Float)
+    qm2 = db.Column(db.Float)
+    pm3 = db.Column(db.Float)
+    qm3 = db.Column(db.Float)
+    pm4 = db.Column(db.Float)
+    qm4 = db.Column(db.Float)
+
+class DataWadukSiman(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    ps1 = db.Column(db.Float)
+    qs1 = db.Column(db.Float)
+    ps2 = db.Column(db.Float)
+    qs2 = db.Column(db.Float)
+    ps3 = db.Column(db.Float)
+    qs3 = db.Column(db.Float)
 
 class DataWadukSutami(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    elevation = db.Column(db.Float)
+    volume = db.Column(db.Float)
+
+class DataWadukWlingi(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    elevation = db.Column(db.Float)
+    volume = db.Column(db.Float)
+
+class DataWadukSutamiOperasi(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
     h = db.Column(db.Float)
     p = db.Column(db.Float)
     q = db.Column(db.Float)
 
-db.Index('sms_h_p', DataWadukSms.h, DataWadukSms.p, unique=True)
-db.Index('sutami_h_p', DataWadukSutami.h, DataWadukSutami.p, unique=True)
+db.Index('selorejo_h_p', DataWadukSelorejo.h, DataWadukSelorejo.p, unique=True)
+db.Index('sutamioperasi_h_p', DataWadukSutamiOperasi.h, DataWadukSutamiOperasi.p, unique=True)

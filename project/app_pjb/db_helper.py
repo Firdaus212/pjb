@@ -9,6 +9,8 @@ def create_connection(db_file):
 
     return conn
 
-def batch_insert(conn, table, data):
-    conn.executemany("insert or ignore into "+table+"(h, p, q) values (?,?,?)", data)
+def batch_insert(conn, table, col, data):
+    str_col = ','.join(tuple(col))
+    str_qmark = ','.join(tuple(['?' for c in col]))
+    conn.executemany("insert or ignore into "+table+"("+str_col+") values ("+str_qmark+")", data)
     conn.commit()

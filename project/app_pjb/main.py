@@ -74,8 +74,8 @@ def perform_optimization(resp_dict, post_data, area):
 
     is_data_exist = False
 
-    if area == area_sms_1 or area == area_sms_2:
-        is_data_exist, data_found = check_data_exist_in_database(conv_res, area)
+    # if area == area_sms_1 or area == area_sms_2:
+    #     is_data_exist, data_found = check_data_exist_in_database(conv_res, area)
 
     if is_data_exist:
         data_found = data_found.__dict__
@@ -98,19 +98,18 @@ def perform_optimization(resp_dict, post_data, area):
             elif area == area_sengguruh:
                 eng.addpath(matlab_file_path_sengguruh)
                 result = eng.sengguruh(conv_res)
-            # eng.quit()
         except Exception as e:
             resp_dict['msg'] = str(e)
             return resp_dict, 400
 
-        if result != {} and ( area == area_sms_1 or area == area_sms_2 ):
-            result.update(conv_res)
-            insert_data = generate_insert_data(result, area)
-            try:
-                db.session.add(insert_data)
-                db.session.commit()
-            except Exception as e:
-                resp_dict['db_insert_error'] = str(e)
+        # if result != {} and ( area == area_sms_1 or area == area_sms_2 ):
+        #     result.update(conv_res)
+        #     insert_data = generate_insert_data(result, area)
+        #     try:
+        #         db.session.add(insert_data)
+        #         db.session.commit()
+        #     except Exception as e:
+        #         resp_dict['db_insert_error'] = str(e)
 
     resp_dict['exec_time'] = time.time() - start_time
     resp_dict['error'] = False

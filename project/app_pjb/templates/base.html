@@ -61,18 +61,15 @@
                       Opt Data
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownOptData">
-                      <a class="dropdown-item" href="{{ url_for('opt_data.data', area='sms1') }}">SMS 1</a>
-                      <a class="dropdown-item" href="{{ url_for('opt_data.data', area='sms2') }}">SMS 2</a>
-                      <a class="dropdown-item" href="{{ url_for('opt_data.data_waduk', area='sms') }}">Data Waduk SMS</a>
-                      <a class="dropdown-item" href="{{ url_for('opt_data.data_waduk', area='sutami-wlingi') }}">Data Waduk Sutami Wlingi</a>
-                      <a class="dropdown-item" href="{{ url_for('opt_data.pivot_data_waduk', area='sms') }}">Pivot Data Waduk SMS</a>
-                      <a class="dropdown-item" href="{{ url_for('opt_data.pivot_data_waduk', area='sutami-wlingi') }}">Pivot Data Waduk Sutami Wlingi</a>
-                      <a class="dropdown-item" href="{{ url_for('opt_data.upload_data_waduk') }}">Upload Data Waduk</a>
+                      <a class="dropdown-item" href="{{ url_for('opt_data.data_waduk', area='selorejo') }}">Data Waduk Selorejo</a>
+                      <a class="dropdown-item" href="{{ url_for('opt_data.data_waduk', area='mendalan') }}">Data Waduk Mendalan</a>
+                      <a class="dropdown-item" href="{{ url_for('opt_data.data_waduk', area='siman') }}">Data Waduk Siman</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="{{ url_for('opt_data.data_waduk', area='sutami') }}">Data Waduk Sutami</a>
+                      <a class="dropdown-item" href="{{ url_for('opt_data.data_waduk', area='wlingi') }}">Data Waduk Wlingi</a>
+                      <a class="dropdown-item" href="{{ url_for('opt_data.data_waduk', area='sutami2') }}">Data Waduk Sutami Operasi</a>
                     </div>
                 </li>
-                <!-- <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('auth.profile') }}">Profile</a>
-                </li> -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMisc" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       Misc
@@ -91,9 +88,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
                 </li>
-                <!-- <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('auth.signup') }}">Sign Up</a>
-                </li> -->
                 {% endif %}
             </ul>
         </div>

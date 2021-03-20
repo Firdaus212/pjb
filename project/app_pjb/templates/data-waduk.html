@@ -14,6 +14,7 @@
               </button>
               <div class="dropdown-menu" aria-labelledby="actionMenu">
                 <button id="addBtn" class="dropdown-item" type="button"><i class="fa fa-plus"></i> Add Data</button>
+                <button id="importBtn" class="dropdown-item" type="button"><i class="fa fa-file-import"></i> Import to Database</button>
                 <a href="{{ url_for('opt_data.export_to_excel', area=data.area) }}" class="dropdown-item" type="button"><i class="fa fa-file-excel"></i> Export to Excel</a>
                 <button id="updateBtn" class="dropdown-item" type="button"><i class="fa fa-sync-alt"></i> Update Excel</button>
                 <button id="emptyBtn" class="dropdown-item" type="button"><i class="fa fa-trash-alt"></i> Empty Table</button>
@@ -23,6 +24,20 @@
         </div> 
       </div>
       <div class="card-body" style="overflow: auto;">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                {% if category == 'error' %}
+                    {% set alert_class = 'danger' %}
+                {% else %}
+                    {% set alert_class = 'success' %}
+                {% endif %}
+                    <div class="alert alert-{{ alert_class }}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+        {% endif %}
+        {% endwith %}
         <table id="table_id" class="table table-dark table-sm" data-area="{{ data.area }}" data-url="{{ data.url }}" data-empty-url="{{ data.empty_url }}">
           <thead class="table table-striped table-bordered nowrap" style="width:100%">
             <tr>
@@ -44,6 +59,23 @@
     </div>
   </div>
 </div>
+<div class="row">
+  {% set size =  data.model|length %}
+  {% for item in data.model %}
+    <div class="col-6 model-col">
+      <div class="card">
+        <div class="card-header">{{ item.title }}</div>
+        <div id="{{ item.id }}" class="card-body">
+          <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
 
 <!-- Modal -->
 <div class="modal fade" id="dataWadukModal" tabindex="-1" aria-labelledby="dataWadukModalLabel" aria-hidden="true">
@@ -57,31 +89,66 @@
       </div>
       <div class="modal-body">
         <form id="formData">
-          <div class="form-group row">
-            <label for="h" class="col-sm-2 col-form-label">H</label>
-            <div class="col-sm-10">
-              <input type="number" class="form-control text-right" id="h" name="h">
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="p" class="col-sm-2 col-form-label">P</label>
-            <div class="col-sm-10">
-              <input type="number" class="form-control text-right" id="p" name="p">
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="q" class="col-sm-2 col-form-label">Q</label>
-            <div class="col-sm-10">
-              <input type="number" class="form-control text-right" id="q" name="q">
-            </div>
-          </div>
-          <input type="hidden" id="entity_id" name="entity_id">
+          {% for field in data.column %}
+            {% if field == 'id' %}
+              <input type="hidden" id="entity_id" name="entity_id">
+            {% else %}
+              <div class="form-group row">
+                <label for="{{ field.lower() }}" class="col-sm-2 col-form-label">{{ field }}</label>
+                <div class="col-sm-10">
+                  <input type="number" class="form-control text-right" id="{{ field.lower() }}" name="{{ field.lower() }}">
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" id="saveBtn" class="btn btn-primary">Save</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="importDataWadukModal" tabindex="-1" aria-labelledby="importDataWadukModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="importDataWadukModalLabel">Import Excel Data to Database</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form 
+        action="{{ url_for('opt_data.do_upload') }}" 
+        method="POST" 
+        enctype="multipart/form-data"
+        onsubmit="importSubmitBtn.disabled = true; return true;"
+        >
+        <div class="modal-body">
+            <div class="form-group row">
+              <label for="h" class="col-sm-2 col-form-label">File Data</label>
+              <div class="col-sm-10">
+                <input 
+                  type="file" 
+                  class="form-control" 
+                  id="file_data" 
+                  name="file_data"
+                  accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                  required
+                >
+                <small class="form-text text-muted">file .xls or .xlsx only</small>
+              </div>
+            </div>
+            <input type="hidden" id="area" name="area" value="{{ data.area }}">
+        </div>
+        <div class="modal-footer">
+          <button type="submit" id="importSubmitBtn" class="btn btn-primary">Submit</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </form> 
     </div>
   </div>
 </div>
