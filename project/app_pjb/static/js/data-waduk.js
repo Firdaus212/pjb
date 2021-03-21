@@ -53,7 +53,7 @@ $(document).ready( function () {
                     disableEnableTrashButton(true);
                 },
                 success: function (response) {
-                    bs4Toast.primary('Success!', 'File Updated', {
+                    bs4Toast.primary('Success!', 'File Updated. Page will reload in 3 seconds.', {
                         delay : 1500,
                         bodyClasses : ['text-white', 'bg-primary'],
                         icon : {
@@ -61,6 +61,11 @@ $(document).ready( function () {
                             class : 'fa-check'
                         }
                     });
+
+                    setTimeout(function(){
+                        location.reload();
+                    }, 3000)
+
                 },
                 error: function(jqXHR, textStatus, errorThrown){
                     bs4Toast.error('Error!', jqXHR.responseJSON.msg, {
@@ -148,7 +153,7 @@ $(document).ready( function () {
                 },
                 error: function(jqXHR, textStatus, errorThrown){
                     bs4Toast.error('Error!', jqXHR.responseJSON.msg, {
-                        delay : 1500,
+                        delay : 3000,
                         bodyClasses : ['text-white', 'bg-danger'],
                         icon : {
                             type : 'fontawesome', 
@@ -209,6 +214,18 @@ $(document).ready( function () {
                  content += "<img class='img-fluid' src='/static/images/"+idx+".png?"+performance.now()+"'>";
                  $('#'+idx).append(content);
             });
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            $(".d-flex.justify-content-center").addClass('hide-spinner');
+            bs4Toast.error('Error!', jqXHR.responseJSON.msg, {
+                delay : 3000,
+                bodyClasses : ['text-white', 'bg-danger'],
+                icon : {
+                    type : 'fontawesome', 
+                    class : 'fa-exclamation-circle'
+                }
+            });
+            disableEnableTrashButton(false);
         }
     });
 
