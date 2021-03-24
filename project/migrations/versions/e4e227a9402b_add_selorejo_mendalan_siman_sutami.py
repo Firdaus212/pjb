@@ -28,6 +28,13 @@ def upgrade():
     sa.Column('qs3', sa.Float(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_table('data_waduk_selorejo',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('h', sa.Float(), nullable=True),
+    sa.Column('p', sa.Float(), nullable=True),
+    sa.Column('q', sa.Float(), nullable=True),
+    sa.PrimaryKeyConstraint('id')
+    )
     op.drop_index('sms_h_p', table_name='data_waduk_sms')
     op.drop_table('data_waduk_sms')
     op.create_index('selorejo_h_p', 'data_waduk_selorejo', ['h', 'p'], unique=True)
@@ -46,4 +53,5 @@ def downgrade():
     )
     op.create_index('sms_h_p', 'data_waduk_sms', ['h', 'p'], unique=1)
     op.drop_table('data_waduk_siman')
+    op.drop_table('data_waduk_selorejo')
     # ### end Alembic commands ###
